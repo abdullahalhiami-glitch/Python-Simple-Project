@@ -56,7 +56,7 @@ while exit:
         calculator(num1,num2,operator)
     else:
         print("********** Please Check Your Numbers And Try Again ***********")
-    exit= input("Do you want to exit (yes/no): ").upper == "NO"
+    exit= input("Do you want to exit (yes/no): ").upper() == "NO"
 
 print("********** Thanks For Using Our Calculator ***********")
 

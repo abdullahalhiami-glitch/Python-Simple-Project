@@ -26,8 +26,8 @@ while exit:
         elif operator == "*":
             print(num1, "*", num2, "=", num1*num2)
         else:
-            exit= input("Do you want to exit (yes/no): ").upper == "NO"
             print("********** Please Check Your Operator And Try Again ***********")
+        exit= input("Do you want to exit (yes/no): ").lower() == "no"
     else:
         print("********** Please Check Your Numbers And Try Again ***********")
 
