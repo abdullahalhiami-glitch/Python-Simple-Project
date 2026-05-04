@@ -39,3 +39,10 @@ print(f'the logarithm of 1000 to the base 10 is: {m.log10(1000)}') #this will re
 print(f'2 to the power of 10 is: {m.pow(2, 10)}') #this will return 2 to the power of 10, which is 1024
 print(f'3.7 rounded down to the nearest integer is: {m.floor(3.7)}') #this will round 3.7 down to the nearest integer, which is 3
 print(f'3.2 rounded up to the nearest integer is: {m.ceil(3.2)}') #this will round 3.2 up to the nearest integer, which is 4
+print(f'the round of the number is {round(number)}')
+
+import random as r
+random_number = r.random()
+rand_int = r.randint(45,90)
+print(f'Your random number is {random_number:.2f}')
+print(f'the number between 45,90 is {rand_int:.2f}')

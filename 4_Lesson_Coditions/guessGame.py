@@ -20,6 +20,7 @@ while numberExit > 0:
     else:
         print(f"Sorry, the Number you guessed is wrong\n The number is {number}")
         print(f"Attempts Left {numberExit}")
+        print('------------------------------------------------')
         numberExit -= 1
 
 # #then asked the user for a number that the user have guessed
