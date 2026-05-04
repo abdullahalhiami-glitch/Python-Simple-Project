@@ -6,6 +6,11 @@
 # print(cl.my_Cal)
 
 
-from Calculator import add, my_Cal
-print(add(5, 3))
-print(my_Cal)
+# from Calculator import add, my_Cal
+# print(add(5, 3))
+# print(my_Cal)
+
+
+from Calculator import add as a
+print(a(5, 3))
+print()
