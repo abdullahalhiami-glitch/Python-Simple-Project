@@ -1,0 +1,12 @@
+8. نظام تذاكر الدعم الفني (Helpdesk Tickets)
+​مشروع يحاكي أنظمة الدعم الفني للشركات.
+البيانات: قائمة قواميس [{"id": 1, "user": "Malek", "issue": "Network", "status": "Open"}]
+​الدوال المطلوبة:
+​create_ticket(user, issue): تنشئ تذكرة بحالة "Open".
+​get_all_tickets(): تُرجع كل التذاكر.
+​get_tickets_by_status(status): تُرجع التذاكر حسب حالتها (Open أو Closed).
+​resolve_ticket(ticket_id): تُغير حالة التذكرة إلى "Closed".
+​search_tickets_by_user(user): تُرجع كل التذاكر الخاصة بمستخدم معين.
+​update_issue_desc(ticket_id, new_desc): لتعديل وصف المشكلة.
+​count_open_tickets(): تُرجع عدد التذاكر التي تحتاج معالجة.
+​delete_ticket(ticket_id): لحذف التذكرة.

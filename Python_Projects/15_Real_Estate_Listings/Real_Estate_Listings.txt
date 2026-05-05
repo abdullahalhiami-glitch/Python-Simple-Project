@@ -1,0 +1,12 @@
+15. نظام إدارة العقارات والإيجارات (Real Estate Listings)
+​نظام لفرز وعرض الشقق المتاحة.
+البيانات: قائمة قواميس [{"id": 1, "type": "Apartment", "price": 300, "status": "Available"}]
+​الدوال المطلوبة:
+​add_property(prop_id, prop_type, price): تسجيل عقار جديد.
+​get_all_properties(): عرض جميع العقارات.
+​get_available_properties(): تُرجع العقارات غير المؤجرة فقط.
+​rent_property(prop_id): تحويل حالة العقار إلى مؤجر.
+​search_by_max_price(budget_limit): تُرجع العقارات التي تناسب ميزانية العميل.
+​search_by_type(prop_type): تصفية العقارات حسب النوع.
+​update_property_price(prop_id, new_price): تعديل الإيجار.
+​remove_property(prop_id): حذف العقار من النظام.

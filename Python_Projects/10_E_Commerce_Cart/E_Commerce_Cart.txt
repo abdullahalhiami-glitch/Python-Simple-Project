@@ -1,0 +1,12 @@
+10. سلة المشتريات الإلكترونية (E-commerce Cart)
+​يحاكي سلة موقع تسوق حقيقي.
+البيانات: قاموس للسلة {"Laptop": {"price": 1000, "qty": 1}}
+​الدوال المطلوبة:
+​add_item_to_cart(name, price, qty): تضيف المنتج أو تزيد كميته إذا كان موجوداً.
+​update_item_qty(name, new_qty): لتعديل الكمية مباشرة.
+​remove_item_from_cart(name): تحذف المنتج بالكامل من السلة.
+​get_cart_contents(): تُرجع محتويات السلة.
+​calculate_cart_total(): تحسب الإجمالي (السعر * الكمية لكل منتج).
+​apply_coupon(total, discount_percentage): تُرجع المبلغ بعد الخصم.
+​get_item_count(): تُرجع إجمالي عدد القطع في السلة.
+​empty_cart(): تُفرغ السلة بعد الدفع.

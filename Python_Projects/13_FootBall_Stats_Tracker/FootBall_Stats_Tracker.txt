@@ -1,0 +1,12 @@
+13. متتبع إحصائيات كرة القدم (Football Stats Tracker)
+​نظام رياضي ممتع يحسب النقاط بناءً على النتائج.
+البيانات: قاموس {"Team_A": {"points": 0, "goals_for": 0, "goals_against": 0}}
+​الدوال المطلوبة:
+​add_team(team_name): تسجيل فريق جديد في الدوري.
+​add_match_result(team_a, team_b, score_a, score_b): تحليل النتيجة وتحديث أهداف ونقاط كلا الفريقين (الفوز 3 نقاط، التعادل 1).
+​get_team_stats(team_name): تُرجع نقاط وأهداف الفريق.
+​calculate_goal_difference(team_name): تُرجع الفارق بين الأهداف المسجلة والمستقبلة.
+​get_league_standings(): تُرجع قائمة الفرق مرتبة تنازلياً حسب النقاط.
+​get_top_scoring_team(): تُرجع الفريق الأكثر تسجيلاً للأهداف.
+​get_best_defense_team(): تُرجع الفريق الأقل استقبالاً للأهداف.
+​clear_league_data(): تصفير الدوري لبدء موسم جديد.

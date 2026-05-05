@@ -1,0 +1,13 @@
+14. Coding_Quiz_Bank
+بنك الأسئلة والاختبارات (Coding Quiz Bank)
+​نظام لإنشاء الأسئلة وتصحيحها التلقائي.
+البيانات: قائمة قواميس [{"q_id": 1, "text": "What is Python?", "answer": "Language", "category": "Programming"}]
+​الدوال المطلوبة:
+​add_question(q_id, question_text, correct_answer, category): إضافة سؤال للقاعدة.
+​get_questions_by_category(category): تُرجع أسئلة مادة معينة فقط.
+​check_answer(q_id, user_answer): تقارن الإجابة وتُرجع True أو False.
+​generate_random_quiz(num_questions): تُرجع أسئلة عشوائية للاختبار (باستخدام random).
+​update_question_text(q_id, new_text): لتصحيح خطأ إملائي في السؤال.
+​get_all_categories(): تُرجع التصنيفات المتاحة في البنك.
+​delete_question(q_id): حذف السؤال.
+​get_total_questions_count(): تُرجع إجمالي عدد الأسئلة.

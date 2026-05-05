@@ -1,0 +1,13 @@
+11. Bus_Reservation_System
+نظام حجز تذاكر الحافلات والرحلات (Bus Reservation System)
+​يحاكي أنظمة النقل وإدارة المقاعد.
+البيانات: قائمة قواميس للرحلات [{"route_id": "R1", "destination": "Sanaa", "capacity": 30, "booked": []}]
+​الدوال المطلوبة:
+​add_route(route_id, destination, capacity): تضيف مسار رحلة جديد للقاموس.
+​get_available_routes(): تُرجع الرحلات التي لا زال فيها مقاعد شاغرة.
+​book_ticket(route_id, passenger_name): تضيف اسم الراكب لقائمة booked وتنقص السعة، وتُرجع تأكيد الحجز.
+​cancel_booking(route_id, passenger_name): تحذف الراكب من القائمة وتفرغ مقعده.
+​check_seat_availability(route_id): تُرجع عدد المقاعد المتبقية.
+​get_passenger_list(route_id): تُرجع قائمة بأسماء الركاب لرحلة محددة.
+​calculate_route_revenue(route_id, ticket_price): تحسب إجمالي الأرباح من المقاعد المحجوزة.
+​search_route_by_destination(destination): تُرجع الرحلات المتجهة لمدينة معينة.

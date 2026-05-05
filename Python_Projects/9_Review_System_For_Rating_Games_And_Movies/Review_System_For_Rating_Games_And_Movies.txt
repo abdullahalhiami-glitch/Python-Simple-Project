@@ -1,0 +1,13 @@
+9. Review_System_For_Rating_Games_And_Movies
+تطبيق تقييم الأفلام/الألعاب (Review System)
+​تطبيق يحسب متوسط التقييمات.
+البيانات: قاموس {"Inception": {"rating_sum": 45, "reviews_count": 10}}
+​الدوال المطلوبة:
+​add_item(name): يضيف فيلماً جديداً بتقييم 0.
+​add_review(name, rating): يضيف التقييم (من 1 لـ 5) للمجموع، ويزيد عداد المقيمين 1.
+​get_average_rating(name): يحسب المتوسط (المجموع / عدد المقيمين).
+​get_all_items(): تُرجع كل الأفلام.
+​get_top_rated_item(): تُرجع الفيلم صاحب أعلى متوسط تقييم.
+​get_items_with_no_reviews(): تُرجع الأفلام التي لم تقيم بعد.
+​reset_reviews(name): تُصفر تقييمات فيلم معين.
+​delete_item(name): تحذف الفيلم من النظام.

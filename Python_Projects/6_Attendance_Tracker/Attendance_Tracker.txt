@@ -1,0 +1,12 @@
+6. سجل الحضور والغياب (Attendance Tracker)
+​ يتابع غياب الطلاب.
+البيانات: قاموس {"Ali": {"present": 10, "absent": 2}}
+​الدوال المطلوبة:
+​add_student(name): تضيف طالباً جديداً برصيد 0 حضور و 0 غياب.
+​mark_present(name): تزيد عداد الحضور للطالب بـ 1.
+​mark_absent(name): تزيد عداد الغياب للطالب بـ 1.
+​get_student_record(name): تُرجع سجل الطالب (حضوره وغيابه).
+​calculate_attendance_percentage(name): تحسب نسبة حضوره المئوية.
+​get_students_with_warnings(absence_limit): تُرجع قائمة بالطلاب الذين تجاوزوا حد الغياب المسموح.
+​get_all_records(): تُرجع سجل الفصل بالكامل.
+​reset_attendance(): تُصَفِّر العدادات لبداية شهر/فصل جديد.

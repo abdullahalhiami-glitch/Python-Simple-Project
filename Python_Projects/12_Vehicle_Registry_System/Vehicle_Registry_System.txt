@@ -1,0 +1,13 @@
+12.Vehicle_Registry_System
+نظام سجلات المركبات والمخالفات (Vehicle Registry System)
+​نظام مروري مصغر يعتمد على البحث والتحديث.
+البيانات: قاموس {"1234-A": {"owner": "Ahmed", "model": "Toyota", "violations": 0}}
+​الدوال المطلوبة:
+​register_vehicle(plate_number, owner, model): تسجيل مركبة جديدة.
+​get_vehicle_info(plate_number): تُرجع تفاصيل المركبة بالكامل.
+​update_vehicle_owner(plate_number, new_owner): نقل ملكية السيارة لشخص آخر.
+​add_traffic_violation(plate_number, amount): إضافة غرامة مالية لسجل المركبة.
+​get_total_violations(plate_number): تُرجع إجمالي الغرامات المتراكمة.
+​pay_violation(plate_number, amount): خصم مبلغ من الغرامات المتراكمة.
+​get_vehicles_with_violations(): تُرجع قائمة بالمركبات المطلوبة للدفع.
+​search_vehicles_by_model(model): تُرجع كل السيارات من طراز معين.

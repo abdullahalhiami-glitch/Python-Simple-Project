@@ -1,0 +1,12 @@
+2. متتبع المصروفات الشخصية (Personal Expense Tracker)
+​تطبيق يحتاجه كل طالب جامعي، يعتمد على الأرقام والعمليات الحسابية البسيطة.
+البيانات: [{"desc": "Coffee", "amount": 500, "category": "Food"}]
+​الدوال المطلوبة:
+​add_expense(desc, amount, category): تضيف المصروف الجديد كقاموس داخل القائمة الرئيسية.
+​get_all_expenses(): تُرجع كل المصروفات المسجلة.
+​calculate_total_spent(): تمر بحلقة على القائمة، تجمع كل المبالغ (amount) وتُرجع الإجمالي.
+​get_expenses_by_category(target_category): تستقبل اسم قسم (مثل "طعام" أو "مواصلات") وتُرجع المصروفات الخاصة به فقط.
+​calculate_category_total(target_category): تُرجع إجمالي المبالغ المصروفة في قسم محدد.
+​get_highest_expense(): تبحث عن وتُرجع المصروف صاحب أعلى مبلغ مالي.
+​delete_expense(index): تحذف مصروفاً معيناً إذا أخطأ المستخدم في إدخاله.
+​check_budget_warning(budget_limit): تستقبل الحد المسموح للصرف، وتُرجع True إذا تجاوز الإجمالي هذا الحد، أو False إذا كان الوضع آمناً.
