@@ -11,3 +11,4 @@
 ​get_all_categories(): تُرجع التصنيفات المتاحة في البنك.
 ​delete_question(q_id): حذف السؤال.
 ​get_total_questions_count(): تُرجع إجمالي عدد الأسئلة.
+

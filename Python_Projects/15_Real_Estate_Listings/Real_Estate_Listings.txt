@@ -10,3 +10,4 @@
 ​search_by_type(prop_type): تصفية العقارات حسب النوع.
 ​update_property_price(prop_id, new_price): تعديل الإيجار.
 ​remove_property(prop_id): حذف العقار من النظام.
+

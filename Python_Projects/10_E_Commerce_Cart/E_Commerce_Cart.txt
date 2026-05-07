@@ -10,3 +10,4 @@
 ​apply_coupon(total, discount_percentage): تُرجع المبلغ بعد الخصم.
 ​get_item_count(): تُرجع إجمالي عدد القطع في السلة.
 ​empty_cart(): تُفرغ السلة بعد الدفع.
+

@@ -10,3 +10,4 @@
 ​get_students_with_warnings(absence_limit): تُرجع قائمة بالطلاب الذين تجاوزوا حد الغياب المسموح.
 ​get_all_records(): تُرجع سجل الفصل بالكامل.
 ​reset_attendance(): تُصَفِّر العدادات لبداية شهر/فصل جديد.
+

@@ -11,3 +11,4 @@
 ​get_items_with_no_reviews(): تُرجع الأفلام التي لم تقيم بعد.
 ​reset_reviews(name): تُصفر تقييمات فيلم معين.
 ​delete_item(name): تحذف الفيلم من النظام.
+

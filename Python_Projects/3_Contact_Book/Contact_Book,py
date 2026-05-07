@@ -1,0 +1,54 @@
+contacts = {
+    "Ali": "777xxx",
+    "Sami": "733xxx"
+}
+
+
+def add_contact(name, phone):
+    """Add a contact if the name does not already exist."""
+    if name in contacts:
+        return False
+    contacts[name] = phone
+    return True
+
+
+def get_all_contacts():
+    """Return all contacts as a dictionary."""
+    return contacts.copy()
+
+
+def search_by_name(keyword):
+    """Return contacts whose name contains the keyword (partial search)."""
+    keyword_lower = keyword.lower()
+    return {name: phone for name, phone in contacts.items() if keyword_lower in name.lower()}
+
+
+def update_phone(name, new_phone):
+    """Update the phone number for an existing contact."""
+    if name not in contacts:
+        return False
+    contacts[name] = new_phone
+    return True
+
+
+def delete_contact(name):
+    """Delete a contact by name."""
+    if name not in contacts:
+        return False
+    del contacts[name]
+    return True
+
+
+def is_duplicate_phone(phone):
+    """Return True if the phone is already registered to another contact."""
+    return phone in contacts.values()
+
+
+def count_contacts():
+    """Return the total number of contacts."""
+    return len(contacts)
+
+
+def get_contacts_sorted():
+    """Return contacts sorted alphabetically by name as a list of tuples."""
+    return sorted(contacts.items())

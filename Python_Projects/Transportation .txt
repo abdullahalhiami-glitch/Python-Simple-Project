@@ -1,0 +1,295 @@
+bus_reservation_system/
+│
+├── app/                          # Main application package
+│   ├── __init__.py
+│
+│   ├── models/                   # Data models (your core entities)
+│   │   ├── route.py
+│   │   ├── bus.py
+│   │   ├── seat.py
+│   │   ├── passenger.py
+│   │   ├── booking.py
+│   │   └── payment.py
+│
+│   ├── services/                 # Business logic layer
+│   │   ├── booking_service.py
+│   │   ├── seat_service.py
+│   │   ├── route_service.py
+│   │   ├── payment_service.py
+│   │   └── pricing_service.py
+│
+│   ├── repositories/             # Data access layer
+│   │   ├── route_repo.py
+│   │   ├── booking_repo.py
+│   │   ├── passenger_repo.py
+│   │   └── payment_repo.py
+│
+│   ├── api/                      # API layer (or CLI handlers)
+│   │   ├── routes_api.py
+│   │   ├── booking_api.py
+│   │   └── passenger_api.py
+│
+│   ├── core/                     # Core utilities & configs
+│   │   ├── config.py
+│   │   ├── exceptions.py
+│   │   └── validators.py
+│
+│   └── utils/                    # Helper functions
+│       ├── id_generator.py
+│       └── logger.py
+│
+├── data/                         # Temporary storage (JSON / mock DB)
+│   ├── routes.json
+│   ├── bookings.json
+│   └── passengers.json
+│
+├── tests/                        # Testing (VERY important professionally)
+│   ├── test_booking.py
+│   ├── test_routes.py
+│   └── test_payments.py
+│
+├── main.py                       # Entry point (run the app)
+├── requirements.txt              # Dependencies
+└── README.md                     # Documentation
+
+yemen_cities = [
+    "Sanaa",
+    "Aden",
+    "Taiz",
+    "Ibb",
+    "Al Hudaydah",
+    "Mukalla",
+    "Dhamar",
+    "Amran",
+    "Saada",
+    "Marib",
+    "Al Bayda",
+    "Hajjah",
+    "Al Jawf",
+    "Shabwah",
+    "Lahij",
+    "Abyan",
+    "Raymah",
+    "Mahwit",
+    "Socotra"
+]
+
+(city1, city2): distance_km
+distance_between_cities = {
+    ("Sanaa", "Ibb"): 190,
+    ("Sanaa", "Taiz"): 260,
+    ("Sanaa", "Aden"): 360,
+    ("Sanaa", "Dhamar"): 100,
+    ("Sanaa", "Amran"): 50,
+    ("Sanaa", "Marib"): 170,
+    ("Sanaa", "Al Hudaydah"): 230,
+
+    ("Ibb", "Taiz"): 60,
+    ("Ibb", "Aden"): 180,
+    ("Ibb", "Dhamar"): 90,
+
+    ("Taiz", "Aden"): 160,
+    ("Taiz", "Al Hudaydah"): 200,
+
+    ("Aden", "Mukalla"): 480,
+    ("Aden", "Lahij"): 30,
+    ("Aden", "Abyan"): 60,
+
+    ("Mukalla", "Shabwah"): 300,
+
+    ("Saada", "Amran"): 120,
+    ("Amran", "Hajjah"): 100,
+
+    ("Marib", "Shabwah"): 200,
+
+    ("Al Hudaydah", "Hajjah"): 120,
+}
+
+route_prices = {
+    ("Ibb", "Sanaa"): {"YR": 15000, "SAR": 100},
+    ("Sanaa", "Taiz"): {"YR": 20000, "SAR": 135},
+    ("Sanaa", "Aden"): {"YR": 30000, "SAR": 200},
+    ("Sanaa", "Dhamar"): {"YR": 8000, "SAR": 55},
+    ("Sanaa", "Amran"): {"YR": 5000, "SAR": 35},
+    ("Sanaa", "Marib"): {"YR": 15000, "SAR": 100},
+    ("Sanaa", "Al Hudaydah"): {"YR": 18000, "SAR": 120},
+
+    ("Ibb", "Taiz"): {"YR": 5000, "SAR": 35},
+    ("Ibb", "Aden"): {"YR": 20000, "SAR": 135},
+
+    ("Taiz", "Aden"): {"YR": 15000, "SAR": 100},
+    ("Taiz", "Al Hudaydah"): {"YR": 18000, "SAR": 120},
+
+    ("Aden", "Mukalla"): {"YR": 35000, "SAR": 235},
+    ("Aden", "Lahij"): {"YR": 3000, "SAR": 20},
+    ("Aden", "Abyan"): {"YR": 5000, "SAR": 35},
+
+    ("Mukalla", "Shabwah"): {"YR": 25000, "SAR": 170},
+
+    ("Saada", "Amran"): {"YR": 10000, "SAR": 70},
+    ("Amran", "Hajjah"): {"YR": 9000, "SAR": 60},
+
+    ("Marib", "Shabwah"): {"YR": 18000, "SAR": 120},
+
+    ("Al Hudaydah", "Hajjah"): {"YR": 10000, "SAR": 70},
+}
+
+price = distance * rate_per_km
+
+yemen_cities = [
+    "Sanaa", "Aden", "Taiz", "Ibb", "Al Hudaydah", "Mukalla",
+    "Dhamar", "Amran", "Saada", "Marib", "Al Bayda",
+    "Hajjah", "Al Hazm", "Ataq", "Zinjibar", "Lahij",
+    "Al Mahwit", "Raymah", "Al Ghaydah", "Sayun",
+    "Tarim", "Shibam", "Seiyun Airport Area", "Qatn",
+    "Harad", "Midi", "Abs", "Bajil", "Zabid",
+    "Bayhan", "Usaylan", "Jardan",
+    "Radaa", "Al Qurayshiyah",
+    "Yarim", "Al Qaida", "Baadan",
+    "Al Khawkhah", "Ad Dahi", "Al Marawiah",
+    "Al Mansurah", "Crater", "Sheikh Othman",
+    "Dar Saad", "Al Buraiqeh",
+    "Al Qafr", "Al Dhihar",
+    "Khamir", "Huth",
+    "Kitaf", "Sahar",
+    "Mahliyah", "Sirwah",
+    "Habban", "Ar Rawdah",
+    "Ahwar", "Lawdar",
+    "Jiblah"
+]
+
+{
+    "route_id": "R1",
+    "destination": "Sanaa",
+    "capacity": 30,
+    "booked": []
+}
+
+available_seats = capacity - len(booked)
+
+class BusReservationSystem:
+
+class BusReservationSystem:
+    def __init__(self):
+        # Store all routes here
+        self.routes = []
+
+    # 🔍 Helper function (internal use)
+    def _find_route(self, route_id):
+        for route in self.routes:
+            if route["route_id"] == route_id:
+                return route
+        return None
+
+    # ✅ 1. Add Route
+    def add_route(self, route_id, destination, capacity):
+        if self._find_route(route_id):
+            return f"Route {route_id} already exists."
+
+        route = {
+            "route_id": route_id,
+            "destination": destination,
+            "capacity": capacity,
+            "booked": []
+        }
+
+        self.routes.append(route)
+        return f"Route {route_id} added successfully."
+
+    # ✅ 2. Get Available Routes
+    def get_available_routes(self):
+        available = []
+
+        for route in self.routes:
+            if len(route["booked"]) < route["capacity"]:
+                available.append(route)
+
+        return available
+
+    # ✅ 3. Book Ticket
+    def book_ticket(self, route_id, passenger_name):
+        route = self._find_route(route_id)
+
+        if not route:
+            return "Route not found."
+
+        if passenger_name in route["booked"]:
+            return f"{passenger_name} already booked."
+
+        if len(route["booked"]) >= route["capacity"]:
+            return "No seats available."
+
+        route["booked"].append(passenger_name)
+
+        return f"Booking confirmed for {passenger_name} on route {route_id}."
+
+    # ✅ 4. Cancel Booking
+    def cancel_booking(self, route_id, passenger_name):
+        route = self._find_route(route_id)
+
+        if not route:
+            return "Route not found."
+
+        if passenger_name not in route["booked"]:
+            return f"{passenger_name} has no booking."
+
+        route["booked"].remove(passenger_name)
+
+        return f"Booking cancelled for {passenger_name}."
+
+    # ✅ 5. Check Seat Availability
+    def check_seat_availability(self, route_id):
+        route = self._find_route(route_id)
+
+        if not route:
+            return "Route not found."
+
+        available_seats = route["capacity"] - len(route["booked"])
+        return available_seats
+
+    # ✅ 6. Get Passenger List
+    def get_passenger_list(self, route_id):
+        route = self._find_route(route_id)
+
+        if not route:
+            return "Route not found."
+
+        return route["booked"]
+
+    # ✅ 7. Calculate Revenue
+    def calculate_route_revenue(self, route_id, ticket_price):
+        route = self._find_route(route_id)
+
+        if not route:
+            return "Route not found."
+
+        revenue = len(route["booked"]) * ticket_price
+        return revenue
+
+    # ✅ 8. Search by Destination
+    def search_route_by_destination(self, destination):
+        results = []
+
+        for route in self.routes:
+            if route["destination"].lower() == destination.lower():
+                results.append(route)
+
+        return results
+
+system = BusReservationSystem()
+
+system.add_route("R1", "Sanaa", 2)
+
+print(system.book_ticket("R1", "Ali"))
+print(system.book_ticket("R1", "Ahmed"))
+print(system.book_ticket("R1", "John"))  # Should fail (full)
+
+print(system.check_seat_availability("R1"))
+
+print(system.get_passenger_list("R1"))
+
+print(system.calculate_route_revenue("R1", 100))
+
+system.cancel_booking("R1", "Ali")
+
+print(system.get_available_routes())
