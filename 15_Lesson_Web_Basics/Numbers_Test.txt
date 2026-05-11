@@ -1,0 +1,112 @@
+Build me a python program for loop that prints nine digits number the first two Unchangeable like this 770000000 to 779999999
+One in python and another version in c++
+
+# Prints numbers from 770000000 to 779999999
+
+start = 770000000
+end = 779999999
+
+for number in range(start, end + 1):
+    print(number)
+
+def generate_numbers(start_prefix, total_digits):
+    """
+    Generate numbers with a fixed prefix.
+
+    Example:
+    Prefix: 77
+    Total digits: 9
+    Output:
+    770000000 -> 779999999
+    """
+
+    variable_digits = total_digits - len(str(start_prefix))
+
+    start = int(f"{start_prefix}" + "0" * variable_digits)
+    end = int(f"{start_prefix}" + "9" * variable_digits)
+
+    for number in range(start, end + 1):
+        print(number)
+
+# Run the program
+generate_numbers(77, 9)
+
+#include <iostream>
+
+int main() {
+    
+    long long start = 770000000;
+    long long end = 779999999;
+
+    for (long long number = start; number <= end; number++) {
+        std::cout << number << std::endl;
+    }
+
+    return 0;
+}
+
+#include <iostream>
+#include <string>
+#include <cmath>
+
+void generateNumbers(int prefix, int totalDigits) {
+
+    std::string prefixStr = std::to_string(prefix);
+
+    int variableDigits = totalDigits - prefixStr.length();
+
+    long long start =
+        std::stoll(prefixStr + std::string(variableDigits, '0'));
+
+    long long end =
+        std::stoll(prefixStr + std::string(variableDigits, '9'));
+
+    for (long long number = start; number <= end; number++) {
+        std::cout << number << std::endl;
+    }
+}
+
+int main() {
+
+    generateNumbers(77, 9);
+
+    return 0;
+}
+
+Can you write a faster version
+
+start = 770000000
+end = 779999999
+
+# Faster output using join()
+output = "\n".join(str(num) for num in range(start, end + 1))
+
+print(output)
+
+Faster version 
+start = 770000000
+end = 779999999
+
+with open("numbers.txt", "w") as file:
+    for num in range(start, end + 1):
+        file.write(f"{num}\n")
+
+print("Done.")
+
+#include <iostream>
+#include <fstream>
+
+int main() {
+
+    std::ofstream file("numbers.txt");
+
+    for (int num = 770000000; num <= 779999999; num++) {
+        file << num << '\n';
+    }
+
+    file.close();
+
+    std::cout << "Done.\n";
+
+    return 0;
+}
