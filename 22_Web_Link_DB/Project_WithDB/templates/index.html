@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل المطاعم | Restaurant Directory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-utensils"></i> المطاعم الذكية
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#about">عن المنصة</a></li>
+            <li><a href="#restaurants">استكشف المطاعم</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-slider">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=2070');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=2070');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&q=80&w=1934');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">تذوق الفخامة، اكتشف الأفضل</h1>
+            <p class="hero-subtitle">دليلك الشامل لأرقى وأفضل المطاعم. استكشف، قيم، وشارك تجربتك.</p>
+            <div class="hero-buttons">
+                <a href="#restaurants" class="btn btn-primary">تصفح المطاعم</a>
+                <button class="btn btn-secondary" onclick="openModal('addRestaurantModal')">إضافة مطعم جديد <i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Platform Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>ماذا تقدم منصتنا؟</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-magnifying-glass-location"></i></div>
+                    <h3>بحث مخصص</h3>
+                    <p>ابحث عن مطعمك المفضل حسب نوع المطبخ بسهولة وسرعة فائقة.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
+                    <h3>تقييمات حقيقية</h3>
+                    <p>شارك رأيك واطلع على تقييمات الزوار لضمان تجربة تناول طعام لا تُنسى.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                    <h3>إدارة مرنة</h3>
+                    <p>أضف مطاعم جديدة، حدّث معلوماتها أو احذفها بضغطة زر من خلال واجهة بسيطة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurants Section -->
+    <section id="restaurants" class="restaurants-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>استكشف المطاعم</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div class="controls-bar">
+                <div class="search-box">
+                    <input type="text" id="searchCuisine" placeholder="ابحث حسب المطبخ (مثال: إيطالي)...">
+                    <button onclick="searchRestaurants()"><i class="fa-solid fa-search"></i></button>
+                </div>
+                <div class="filter-box">
+                    <input type="number" id="minRating" placeholder="الحد الأدنى للتقييم..." min="1" max="5">
+                    <button onclick="filterTopRated()" class="btn-outline">الأعلى تقييماً <i class="fa-solid fa-filter"></i></button>
+                    <button onclick="loadAllRestaurants()" class="btn-outline refresh-btn"><i class="fa-solid fa-rotate-right"></i> الكل</button>
+                </div>
+            </div>
+
+            <div id="restaurantsGrid" class="restaurants-grid">
+                <!-- Cards will be injected here via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 للمهندس مالك . جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- Modals (Add, Rating, Update) -->
+    <!-- Add Restaurant Modal -->
+    <div id="addRestaurantModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addRestaurantModal')">&times;</span>
+            <h2>إضافة مطعم جديد</h2>
+            <form id="addRestaurantForm" onsubmit="addRestaurant(event)">
+                <div class="form-group">
+                    <label>اسم المطعم</label>
+                    <input type="text" id="addName" required>
+                </div>
+                <div class="form-group">
+                    <label>نوع المطبخ</label>
+                    <input type="text" id="addCuisine" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">إضافة</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Rating Modal -->
+    <div id="addRatingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addRatingModal')">&times;</span>
+            <h2>إضافة تقييم لـ <span id="ratingRestaurantName"></span></h2>
+            <form id="addRatingForm" onsubmit="addRating(event)">
+                <input type="hidden" id="ratingNameInput">
+                <div class="form-group">
+                    <label>التقييم (1-5)</label>
+                    <input type="number" id="ratingValue" min="1" max="5" step="0.1" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">تقييم</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Cuisine Modal -->
+    <div id="updateCuisineModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('updateCuisineModal')">&times;</span>
+            <h2>تحديث مطبخ <span id="updateRestaurantName"></span></h2>
+            <form id="updateCuisineForm" onsubmit="updateCuisine(event)">
+                <input type="hidden" id="updateNameInput">
+                <div class="form-group">
+                    <label>المطبخ الجديد</label>
+                    <input type="text" id="newCuisineValue" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">تحديث</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

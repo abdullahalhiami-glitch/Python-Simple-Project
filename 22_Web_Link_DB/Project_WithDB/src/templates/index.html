@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل المطاعم | Restaurant Explorer</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Remix Icons for sleek SVG icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="logo">
+                <i class="ri-restaurant-2-fill"></i>
+                <h1>دليل المطاعم</h1>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" onclick="openModal('addRestaurantModal')">
+                    <i class="ri-add-line"></i> إضافة مطعم
+                </button>
+                
+                <div class="search-box">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="searchInput" placeholder="بحث بنوع المطعم..." onkeypress="handleSearch(event)">
+                </div>
+                
+                <div class="filter-box">
+                    <label for="topRatedInput">تصفية حسب التقييم:</label>
+                    <div class="input-group">
+                        <input type="number" id="topRatedInput" placeholder="مثال: 4.0" step="0.1" min="0" max="5">
+                        <button class="btn btn-secondary" title="تطبيق" onclick="fetchTopRated()"><i class="ri-filter-line"></i></button>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;" onclick="fetchAllRestaurants()">
+                    <i class="ri-refresh-line"></i> عرض الكل
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <h2>استكشف المطاعم المميزة</h2>
+            </header>
+            
+            <div class="restaurant-grid" id="restaurantGrid">
+                <!-- Cards will be injected here via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Restaurant Modal -->
+    <div class="modal-overlay" id="addRestaurantModal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3>إضافة مطعم جديد</h3>
+                <button class="close-btn" onclick="closeModal('addRestaurantModal')"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="addName" placeholder="اسم المطعم" class="input-field">
+                <input type="text" id="addCuisine" placeholder="نوع الطعام (Cuisine)" class="input-field">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitAddRestaurant()">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Cuisine Modal -->
+    <div class="modal-overlay" id="updateCuisineModal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3>تحديث نوع المطعم</h3>
+                <button class="close-btn" onclick="closeModal('updateCuisineModal')"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="updateRestaurantName">
+                <input type="text" id="updateCuisineInput" placeholder="نوع الطعام الجديد" class="input-field">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitUpdateCuisine()">تحديث</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Rating Modal -->
+    <div class="modal-overlay" id="addRatingModal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3>تقييم المطعم</h3>
+                <button class="close-btn" onclick="closeModal('addRatingModal')"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ratingRestaurantName">
+                <div class="star-rating" id="starRating">
+                    <i class="ri-star-line" data-value="1"></i>
+                    <i class="ri-star-line" data-value="2"></i>
+                    <i class="ri-star-line" data-value="3"></i>
+                    <i class="ri-star-line" data-value="4"></i>
+                    <i class="ri-star-line" data-value="5"></i>
+                </div>
+                <input type="hidden" id="ratingValue" value="0">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitRating()">إرسال التقييم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3 id="infoTitle">تفاصيل المطعم</h3>
+                <button class="close-btn" onclick="closeModal('infoModal')"><i class="ri-close-line"></i></button>
+            </div>
+            <div class="modal-body" id="infoBody">
+                <!-- Info will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
