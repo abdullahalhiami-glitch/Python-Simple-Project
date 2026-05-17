@@ -1,0 +1,65 @@
+{
+  "updated_at": "2026-05-15T20:22:28.139538+00:00",
+  "routes": [
+    {
+      "Route_Id": "R1",
+      "Destination": "Sana'a",
+      "Total_Capacity": 30,
+      "Available_Capacity": 30,
+      "Capacity": 30,
+      "Booked": [],
+      "Ticket_Price": 100,
+      "Created_At": "2026-05-15T20:20:41.514090+00:00",
+      "Updated_At": "2026-05-15T20:20:41.514114+00:00",
+      "Booked_Count": 0
+    },
+    {
+      "Route_Id": "R2",
+      "Destination": "Aden",
+      "Total_Capacity": 42,
+      "Available_Capacity": 42,
+      "Capacity": 42,
+      "Booked": [],
+      "Ticket_Price": 120,
+      "Created_At": "2026-05-15T20:20:41.514119+00:00",
+      "Updated_At": "2026-05-15T20:20:41.514121+00:00",
+      "Booked_Count": 0
+    },
+    {
+      "Route_Id": "R3",
+      "Destination": "Ibb",
+      "Total_Capacity": 28,
+      "Available_Capacity": 28,
+      "Capacity": 28,
+      "Booked": [],
+      "Ticket_Price": 85,
+      "Created_At": "2026-05-15T20:20:41.514124+00:00",
+      "Updated_At": "2026-05-15T20:20:41.514125+00:00",
+      "Booked_Count": 0
+    },
+    {
+      "Route_Id": "R4",
+      "Destination": "Taiz",
+      "Total_Capacity": 36,
+      "Available_Capacity": 36,
+      "Capacity": 36,
+      "Booked": [],
+      "Ticket_Price": 95,
+      "Created_At": "2026-05-15T20:20:41.514128+00:00",
+      "Updated_At": "2026-05-15T20:20:41.514130+00:00",
+      "Booked_Count": 0
+    },
+    {
+      "Route_Id": "R5",
+      "Destination": "Alpag",
+      "Total_Capacity": 10,
+      "Available_Capacity": 10,
+      "Capacity": 10,
+      "Booked": [],
+      "Ticket_Price": 100,
+      "Created_At": "2026-05-15T20:22:28.138959+00:00",
+      "Updated_At": "2026-05-15T20:22:28.138973+00:00",
+      "Booked_Count": 0
+    }
+  ]
+}

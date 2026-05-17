@@ -1,0 +1,15 @@
+body{
+    background-color: bisque;
+    font-family: Verdana;
+}
+
+hr{
+    color: black;
+    border:10px;
+}
+#Name{ 
+    background-color: bisque;
+    color:blueviolet;
+    padding:0ch;
+    font-size: 30px;
+}

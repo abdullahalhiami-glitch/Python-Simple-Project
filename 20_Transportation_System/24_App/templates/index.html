@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-media" role="img" aria-label="Premium transportation convoy at night"></div>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7" data-aos="fade-up">
+                <div class="hero-logo-pill">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Al-Hiami Transportation logo">
+                    <span class="status-inline"><span class="status-pulse"></span> Live dispatch platform</span>
+                </div>
+                <p class="eyebrow">Premium transportation management</p>
+                <h1>Move Smarter Across Yemen</h1>
+                <p class="hero-copy">Book routes, manage capacity, track passengers, and monitor revenue from a polished command center built around your existing Flask transportation engine.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-brand btn-lg" data-bs-toggle="modal" data-bs-target="#modalBook">
+                        <i data-lucide="ticket"></i> Book Routes Instantly
+                    </button>
+                    <a class="btn btn-glass btn-lg" href="/information">
+                        <i data-lucide="bar-chart-3"></i> View Dashboard
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5" data-aos="fade-left" data-aos-delay="150">
+                <div class="booking-panel">
+                    <div class="panel-header">
+                        <div>
+                            <p class="eyebrow">Smart route search</p>
+                            <h2>Find and book in seconds</h2>
+                        </div>
+                        <span class="mini-badge" id="heroStatus">Online</span>
+                    </div>
+                    <form class="ajax-form hero-search" data-endpoint="/searchroute">
+                        <label for="hero-route" class="form-label">Route ID</label>
+                        <div class="input-action">
+                            <input id="hero-route" class="form-control" name="route_id" placeholder="Try R1" required>
+                            <button class="btn btn-brand" type="submit">Search</button>
+                        </div>
+                        <div class="result-panel" data-result></div>
+                    </form>
+                    <div class="quick-actions">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modalAddRoute"><i data-lucide="plus"></i> Add</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modalSeat"><i data-lucide="armchair"></i> Seats</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modalRevenue"><i data-lucide="banknote"></i> Revenue</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modalSystem"><i data-lucide="settings-2"></i> System</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats-band" aria-label="Live transportation statistics">
+    <div class="container">
+        <div class="metric-grid">
+            <article class="metric-card" data-aos="fade-up">
+                <i data-lucide="route"></i>
+                <span class="counter" data-stat="total_routes" data-count="{{ stats.total_routes }}">0</span>
+                <p>Total routes</p>
+            </article>
+            <article class="metric-card" data-aos="fade-up" data-aos-delay="80">
+                <i data-lucide="map-pin"></i>
+                <span class="counter" data-stat="total_destinations" data-count="{{ stats.total_destinations }}">0</span>
+                <p>Destinations</p>
+            </article>
+            <article class="metric-card" data-aos="fade-up" data-aos-delay="160">
+                <i data-lucide="users"></i>
+                <span class="counter" data-stat="total_bookings" data-count="{{ stats.total_bookings }}">0</span>
+                <p>Bookings</p>
+            </article>
+            <article class="metric-card" data-aos="fade-up" data-aos-delay="240">
+                <i data-lucide="wallet"></i>
+                <span class="counter" data-stat="revenue" data-count="{{ stats.revenue }}">0</span>
+                <p>Revenue</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="section-heading" data-aos="fade-up">
+            <p class="eyebrow">Available routes</p>
+            <h2>Live Route Network</h2>
+            <div class="section-actions">
+                <button class="btn btn-soft" data-get="/availableroutes" data-render-target="#routeFeed"><i data-lucide="refresh-cw"></i> Refresh</button>
+                <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#modalBook"><i data-lucide="ticket"></i> Book ticket</button>
+            </div>
+        </div>
+        <div class="swiper route-swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper" id="routeFeed">
+                {% for route in stats.routes %}
+                <article class="swiper-slide route-card">
+                    <div class="route-card-top">
+                        <span>{{ route.Route_Id }}</span>
+                        <small>{{ route.Available_Capacity }} seats open</small>
+                    </div>
+                    <h3>{{ route.Destination }}</h3>
+                    <div class="capacity-line">
+                        <span style="width: {{ ((route.Booked|length / route.Total_Capacity) * 100) if route.Total_Capacity else 0 }}%"></span>
+                    </div>
+                    <p>{{ route.Booked|length }} booked of {{ route.Total_Capacity }} seats</p>
+                    <button class="btn btn-soft w-100" data-route-book="{{ route.Route_Id }}">Book {{ route.Route_Id }}</button>
+                </article>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell split-showcase">
+    <div class="container">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="showcase-panel">
+                    <p class="eyebrow">Operations cockpit</p>
+                    <h2>Every endpoint has a real workflow.</h2>
+                    <p>Search routes, inspect destinations, add or delete capacity, book tickets, cancel passengers, calculate revenue, and control the system state from one interface.</p>
+                    <div class="command-grid">
+                        <button data-bs-toggle="modal" data-bs-target="#modalSearchDestination">Search destination</button>
+                        <button data-bs-toggle="modal" data-bs-target="#modalRoutesDestination">Routes by destination</button>
+                        <button data-bs-toggle="modal" data-bs-target="#modalPassengers">Passenger list</button>
+                        <button data-bs-toggle="modal" data-bs-target="#modalRouteSummary">Route summary</button>
+                        <button data-bs-toggle="modal" data-bs-target="#modalUpdateRoute">Update route</button>
+                        <button data-bs-toggle="modal" data-bs-target="#modalDeleteRoute">Delete route</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="visual-dashboard">
+                    <canvas id="homeRevenueChart" height="210" aria-label="Revenue chart"></canvas>
+                    <div class="dashboard-kpis">
+                        <span><strong>{{ stats.utilization }}%</strong> Utilization</span>
+                        <span><strong>{{ stats.available_capacity }}</strong> Seats open</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell trust-section">
+    <div class="container">
+        <div class="section-heading centered" data-aos="fade-up">
+            <p class="eyebrow">Trusted movement</p>
+            <h2>Built for confident transportation decisions</h2>
+        </div>
+        <div class="trust-grid">
+            <article data-aos="zoom-in"><i data-lucide="shield-check"></i><h3>Secure workflows</h3><p>Validated forms, clear responses, and graceful error states.</p></article>
+            <article data-aos="zoom-in" data-aos-delay="100"><i data-lucide="zap"></i><h3>Fast operations</h3><p>Fetch-powered actions update live without reloading pages.</p></article>
+            <article data-aos="zoom-in" data-aos-delay="200"><i data-lucide="line-chart"></i><h3>Revenue aware</h3><p>Dashboards make bookings, capacity, and revenue easy to scan.</p></article>
+        </div>
+    </div>
+</section>
+{% endblock %}

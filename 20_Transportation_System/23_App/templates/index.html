@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ═══════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-overlay"></div>
+    <div class="hero-particles" id="hero-particles"></div>
+  </div>
+
+  <div class="hero-content container">
+    <div class="hero-badge" data-aos="fade-down" data-aos-delay="100">
+      <span class="status-dot pulse"></span>
+      <span>Live Transportation Network — Yemen</span>
+    </div>
+
+    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="200">
+      Move Smarter<br/>
+      <span class="gradient-text">Across Yemen</span>
+    </h1>
+
+    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="350">
+      Premium transportation solutions connecting Yemen's cities.<br />
+      Book seats, track routes, and travel with confidence.
+    </p>
+
+    <!-- Quick Booking Panel -->
+    <div class="hero-booking-panel glass-card" data-aos="fade-up" data-aos-delay="450">
+      <div class="booking-panel-tabs">
+        <button class="panel-tab active" id="tab-book" onclick="switchHeroTab('book')">
+          <i class="bi bi-ticket-fill"></i> Book Ticket
+        </button>
+        <button class="panel-tab" id="tab-search" onclick="switchHeroTab('search')">
+          <i class="bi bi-search"></i> Find Route
+        </button>
+        <button class="panel-tab" id="tab-seats" onclick="switchHeroTab('seats')">
+          <i class="bi bi-person-check-fill"></i> Seat Check
+        </button>
+      </div>
+
+      <!-- Book Tab -->
+      <div id="panel-book" class="panel-content">
+        <form onsubmit="handleQuickBook(event)" class="panel-form">
+          <div class="panel-inputs">
+            <div class="panel-input-group">
+              <i class="bi bi-signpost-fill"></i>
+              <input type="text" id="hero-route-id" placeholder="Route ID (e.g. R1)" class="panel-input" required />
+            </div>
+            <div class="panel-input-group">
+              <i class="bi bi-person-fill"></i>
+              <input type="text" id="hero-passenger" placeholder="Your full name" class="panel-input" required />
+            </div>
+            <button type="submit" class="btn btn-primary panel-btn">
+              <i class="bi bi-arrow-right-circle-fill"></i> Book Now
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search Tab -->
+      <div id="panel-search" class="panel-content hidden">
+        <form onsubmit="handleQuickSearch(event)" class="panel-form">
+          <div class="panel-inputs">
+            <div class="panel-input-group">
+              <i class="bi bi-geo-alt-fill"></i>
+              <input type="text" id="hero-search-dest" placeholder="Search by destination" class="panel-input" />
+            </div>
+            <button type="submit" class="btn btn-primary panel-btn">
+              <i class="bi bi-search"></i> Search
+            </button>
+          </div>
+        </form>
+        <div id="hero-search-result" class="panel-result"></div>
+      </div>
+
+      <!-- Seats Tab -->
+      <div id="panel-seats" class="panel-content hidden">
+        <form onsubmit="handleQuickSeats(event)" class="panel-form">
+          <div class="panel-inputs">
+            <div class="panel-input-group">
+              <i class="bi bi-signpost-fill"></i>
+              <input type="text" id="hero-seat-route" placeholder="Route ID (e.g. R2)" class="panel-input" />
+            </div>
+            <button type="submit" class="btn btn-primary panel-btn">
+              <i class="bi bi-person-check-fill"></i> Check
+            </button>
+          </div>
+        </form>
+        <div id="hero-seat-result" class="panel-result"></div>
+      </div>
+    </div>
+
+    <!-- Hero CTA Buttons -->
+    <div class="hero-cta-group" data-aos="fade-up" data-aos-delay="550">
+      <button class="btn btn-primary btn-lg" onclick="openModal('bookingModal')">
+        <i class="bi bi-ticket-perforated-fill"></i> Book a Ticket
+      </button>
+      <a href="/information" class="btn btn-outline btn-lg">
+        <i class="bi bi-bar-chart-fill"></i> View Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero Scroll Indicator -->
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     LIVE STATS SECTION
+═══════════════════════════════════════════ -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card glass-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-icon-wrap stat-blue">
+          <i class="bi bi-signpost-2-fill"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" data-target="{{ stats.total_routes }}" id="stat-routes">0</span>
+          <span class="stat-label">Active Routes</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-icon-wrap stat-cyan">
+          <i class="bi bi-geo-alt-fill"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" data-target="{{ stats.total_destinations }}" id="stat-dests">0</span>
+          <span class="stat-label">Destinations</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-icon-wrap stat-green">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number" data-target="{{ stats.total_bookings }}" id="stat-bookings">0</span>
+          <span class="stat-label">Total Bookings</span>
+        </div>
+      </div>
+      <div class="stat-card glass-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-icon-wrap stat-emerald">
+          <i class="bi bi-cash-coin"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-number currency" data-target="{{ stats.total_revenue }}" id="stat-revenue">0</span>
+          <span class="stat-label">Total Revenue (USD)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     AVAILABLE ROUTES SECTION
+═══════════════════════════════════════════ -->
+<section class="routes-section section" id="routes">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Live Routes</span>
+      <h2 class="section-title">Available <span class="gradient-text">Routes</span></h2>
+      <p class="section-subtitle">Real-time seat availability across all active routes</p>
+    </div>
+
+    <!-- Route Controls -->
+    <div class="routes-controls" data-aos="fade-up" data-aos-delay="100">
+      <div class="search-bar-wrap">
+        <i class="bi bi-search"></i>
+        <input type="text" id="route-search-input" class="search-bar-input" placeholder="Search routes or destinations..." oninput="filterRouteCards(this.value)" />
+      </div>
+      <div class="routes-actions">
+        <button class="btn btn-outline btn-sm" onclick="loadRouteCards()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addRouteModal')">
+          <i class="bi bi-plus-circle-fill"></i> Add Route
+        </button>
+      </div>
+    </div>
+
+    <!-- Route Cards Grid -->
+    <div class="routes-grid" id="routes-grid" data-aos="fade-up" data-aos-delay="200">
+      <!-- Skeleton loaders shown initially -->
+      {% for i in range(3) %}
+      <div class="route-card skeleton-card">
+        <div class="skeleton-line wide"></div>
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SERVICES SECTION
+═══════════════════════════════════════════ -->
+<section class="services-section section" id="services">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Our Services</span>
+      <h2 class="section-title">Everything You <span class="gradient-text">Need</span></h2>
+      <p class="section-subtitle">A complete transportation management ecosystem</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="100" onclick="openModal('bookingModal')">
+        <div class="service-icon bg-blue"><i class="bi bi-ticket-perforated-fill"></i></div>
+        <h3 class="service-title">Ticket Booking</h3>
+        <p class="service-desc">Book seats instantly on any available route. Real-time confirmation.</p>
+        <span class="service-link">Book Now <i class="bi bi-arrow-right"></i></span>
+      </div>
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="150" onclick="openModal('searchRouteModal')">
+        <div class="service-icon bg-cyan"><i class="bi bi-search"></i></div>
+        <h3 class="service-title">Route Search</h3>
+        <p class="service-desc">Find routes by ID or destination with instant search results.</p>
+        <span class="service-link">Search <i class="bi bi-arrow-right"></i></span>
+      </div>
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="200" onclick="openModal('seatModal')">
+        <div class="service-icon bg-green"><i class="bi bi-person-check-fill"></i></div>
+        <h3 class="service-title">Seat Availability</h3>
+        <p class="service-desc">Live seat count tracking across all routes and destinations.</p>
+        <span class="service-link">Check Seats <i class="bi bi-arrow-right"></i></span>
+      </div>
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="250" onclick="openModal('passengerModal')">
+        <div class="service-icon bg-purple"><i class="bi bi-people-fill"></i></div>
+        <h3 class="service-title">Passenger Lists</h3>
+        <p class="service-desc">View complete passenger manifests by route or destination.</p>
+        <span class="service-link">View Passengers <i class="bi bi-arrow-right"></i></span>
+      </div>
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="300" onclick="openModal('revenueModal')">
+        <div class="service-icon bg-emerald"><i class="bi bi-cash-coin"></i></div>
+        <h3 class="service-title">Revenue Analytics</h3>
+        <p class="service-desc">Calculate route revenue with custom ticket pricing in real-time.</p>
+        <span class="service-link">Calculate <i class="bi bi-arrow-right"></i></span>
+      </div>
+      <div class="service-card glass-card" data-aos="fade-up" data-aos-delay="350" onclick="openModal('cancelModal')">
+        <div class="service-icon bg-red"><i class="bi bi-x-circle-fill"></i></div>
+        <h3 class="service-title">Cancel Booking</h3>
+        <p class="service-desc">Hassle-free cancellation with automatic seat release.</p>
+        <span class="service-link">Cancel <i class="bi bi-arrow-right"></i></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SYSTEM CONTROL PANEL
+═══════════════════════════════════════════ -->
+<section class="control-section section" id="control">
+  <div class="container">
+    <div class="control-panel glass-card" data-aos="fade-up">
+      <div class="control-left">
+        <h2 class="control-title">System Control Panel</h2>
+        <p class="control-desc">Monitor and manage the Al-Hiami transportation system</p>
+        <div class="system-status-display" id="system-status-display">
+          <div class="system-status-badge" id="system-status-badge">
+            <span class="status-dot pulse" id="sys-dot"></span>
+            <span id="sys-status-text">Checking status...</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-right">
+        <div class="control-buttons">
+          <button class="btn btn-danger btn-lg" onclick="handleExit()">
+            <i class="bi bi-stop-circle-fill"></i> Stop System
+          </button>
+          <button class="btn btn-success btn-lg" onclick="handleRestart()">
+            <i class="bi bi-arrow-repeat"></i> Restart System
+          </button>
+        </div>
+        <div class="control-quick-actions">
+          <button class="quick-btn" onclick="openModal('addRouteModal')">
+            <i class="bi bi-plus-circle-fill"></i> Add Route
+          </button>
+          <button class="quick-btn" onclick="openModal('deleteRouteModal')">
+            <i class="bi bi-trash3-fill"></i> Delete Route
+          </button>
+          <button class="quick-btn" onclick="openModal('passengerModal')">
+            <i class="bi bi-people-fill"></i> Passengers
+          </button>
+          <button class="quick-btn" onclick="openModal('revenueModal')">
+            <i class="bi bi-cash-coin"></i> Revenue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS / TRUST
+═══════════════════════════════════════════ -->
+<section class="trust-section section" id="trust">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Trusted By Thousands</span>
+      <h2 class="section-title">What Our <span class="gradient-text">Passengers Say</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card glass-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+        <p class="testimonial-text">"Al-Hiami Transportation made our intercity travel seamless. The booking system is incredibly fast and reliable."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AH</div>
+          <div><strong>Ahmed Hassan</strong><br/><small>Sana'a → Aden</small></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+        <p class="testimonial-text">"Best transportation service in Yemen. Professional, punctual, and affordable. Highly recommended!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">FM</div>
+          <div><strong>Fatima Mohammed</strong><br/><small>Taiz → Mukalla</small></div>
+        </div>
+      </div>
+      <div class="testimonial-card glass-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="testimonial-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+        <p class="testimonial-text">"The real-time seat tracking feature is a game-changer. No more uncertainty about seat availability!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">KA</div>
+          <div><strong>Khaled Al-Jabri</strong><br/><small>Hodeidah → Sana'a</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA SECTION
+═══════════════════════════════════════════ -->
+<section class="cta-section" id="cta">
+  <div class="cta-overlay"></div>
+  <div class="container cta-content" data-aos="fade-up">
+    <h2 class="cta-title">Ready to Travel?</h2>
+    <p class="cta-subtitle">Book your seat now and experience premium transportation across Yemen</p>
+    <div class="cta-buttons">
+      <button class="btn btn-white btn-lg" onclick="openModal('bookingModal')">
+        <i class="bi bi-ticket-perforated-fill"></i> Book Now — Free
+      </button>
+      <a href="/information" class="btn btn-outline-white btn-lg">
+        <i class="bi bi-bar-chart-fill"></i> View All Routes
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Load route cards on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    loadRouteCards();
+    checkSystemStatus();
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{GasStation}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+</head>
+
+<body>
+    <h1 id="Name">{{name}}</h1>
+
+    <p>Welcome to our gas station. How can we help you?</p>
+    {% for i in range(0,9)%}
+    {% for j in range(0,3)%}
+    <p>{{i}}->{{j}}: Abdullah</p>
+    {% endfor %}
+    {% endfor %}
+
+    {% if name== "Abd-Gas Station" %}
+    <p>This is a gas station.</p>
+    {% else %}
+    <p>This message is for other user.</p>
+    {% endif %}
+
+    <h1>List</h1>
+    {% for deg in degree%}
+    <p>{{deg}}</p>
+    {% endfor %}
+    <h1>While</h1>
+    {% while True : %}
+    <p>Hello</p>
+    {% endwhile %}
+
+    <form action="/submit">
+        <label for="name">Name: </label>
+        <input type="text" id="name" name='name'><br><br>
+        <label for='age'>Age:</label>
+        <input type='number' id='age' name='age'><br><br>
+        <input type='submit' value='Submit'>
+    </form>
+
+    <!-- <form action="/submit" method="post">
+        <label for='name'>Name:</label>
+        <input type='text' id='name' name='name'><br><br>
+        <label for='age'>Age:</label>
+        <input type='number' id='age' name='age'><br><br>
+        <input type='submit' value='Submit'>
+    </form> -->
+
+
+</body>
+
+</html>

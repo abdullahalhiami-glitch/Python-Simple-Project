@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{Transportation_System}} | Al-Hiami Transport</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-content {
+            padding: 120px 10% 80px;
+            min-height: 70vh;
+        }
+        .page-header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 3rem;
+        }
+        .content-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-accent">Al-Hiami</span> Transport
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/information">Information</a></li>
+            <li><a href="/contactus">Contact Us</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="/#booking" class="btn btn-outline">Book Now</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="page-header">
+            <h1>{{name}}</h1>
+        </div>
+        <div class="content-box">
+            <h2>Our Mission</h2>
+            <p>We provide clients with the best services that match their demands. Whether you're commuting daily or taking an intercity journey, Al-Hiami Transport ensures maximum comfort, safety, and speed.</p>
+            <br>
+            <h2>Why Choose Us?</h2>
+            <p>With an ever-expanding fleet of high-speed transit options, we guarantee reliable routing, intuitive booking, and premium customer service across all our destinations.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Al-Hiami Transport</h3>
+                <p>The premier transportation solution powering Yemen and beyond.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about">About</a>
+                <a href="/contactus">Contact</a>
+                <a href="/information">Info</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Al-Hiami Transportation App. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

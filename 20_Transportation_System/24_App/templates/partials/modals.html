@@ -1,0 +1,136 @@
+{% macro modal_form(modal_id, title, endpoint, fields, submit_label="Run request") %}
+<div class="modal fade app-modal" id="{{ modal_id }}" tabindex="-1" aria-labelledby="{{ modal_id }}Title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">API action</p>
+                    <h2 class="modal-title h4" id="{{ modal_id }}Title">{{ title }}</h2>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="ajax-form" data-endpoint="{{ endpoint }}" data-refresh="true">
+                <div class="modal-body">
+                    {% for field in fields %}
+                    <label class="form-label" for="{{ modal_id }}-{{ field.name }}">{{ field.label }}</label>
+                    <input
+                        class="form-control"
+                        id="{{ modal_id }}-{{ field.name }}"
+                        name="{{ field.name }}"
+                        type="{{ field.type|default('text') }}"
+                        placeholder="{{ field.placeholder }}"
+                        {% if field.required|default(true) %}required{% endif %}
+                    >
+                    {% endfor %}
+                    <div class="result-panel mt-3" data-result></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-brand">
+                        <span class="button-text">{{ submit_label }}</span>
+                        <span class="button-loader"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{{ modal_form("modalSearchRoute", "Search Route", "/searchroute", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"}
+], "Find route") }}
+
+{{ modal_form("modalSearchDestination", "Search Destination", "/searchdestination", [
+    {"name": "destination_id", "label": "Destination", "placeholder": "Sana'a"}
+], "Find destination") }}
+
+{{ modal_form("modalAddRoute", "Add Route", "/addroute", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R5"},
+    {"name": "destination", "label": "Destination", "placeholder": "Mukalla"},
+    {"name": "capacity", "label": "Capacity", "placeholder": "40", "type": "number"}
+], "Create route") }}
+
+{{ modal_form("modalUpdateRoute", "Update Route", "/updateroute", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"},
+    {"name": "destination", "label": "New destination", "placeholder": "Optional", "required": false},
+    {"name": "capacity", "label": "New total capacity", "placeholder": "Optional", "type": "number", "required": false}
+], "Update route") }}
+
+{{ modal_form("modalDeleteRoute", "Delete Route", "/deleteroute", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R4"}
+], "Delete route") }}
+
+{{ modal_form("modalBook", "Book Ticket", "/bookticket", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"},
+    {"name": "passenger_name", "label": "Passenger name", "placeholder": "Full name"}
+], "Confirm booking") }}
+
+{{ modal_form("modalCancel", "Cancel Booking", "/cancelbooking", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"},
+    {"name": "passenger_name", "label": "Passenger name", "placeholder": "Full name"}
+], "Cancel booking") }}
+
+{{ modal_form("modalSeat", "Check Seat Availability", "/checkseatavailability", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"}
+], "Check seats") }}
+
+{{ modal_form("modalPassengers", "Passenger List", "/getpassengerlist", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"}
+], "Load passengers") }}
+
+{{ modal_form("modalPassengersDestination", "Passengers By Destination", "/getpassengerlistbydestination", [
+    {"name": "destination", "label": "Destination", "placeholder": "Aden"}
+], "Load passengers") }}
+
+{{ modal_form("modalPassengersRoute", "Passengers By Route", "/getpassengerlistbyroute", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"}
+], "Load route passengers") }}
+
+{{ modal_form("modalRevenue", "Calculate Route Revenue", "/calculaterouterevenue", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"},
+    {"name": "ticket_price", "label": "Ticket price override", "placeholder": "Optional", "type": "number", "required": false}
+], "Calculate revenue") }}
+
+{{ modal_form("modalRoutesDestination", "Search Routes By Destination", "/searchroutebydestination", [
+    {"name": "destination", "label": "Destination", "placeholder": "Taiz"}
+], "Search routes") }}
+
+{{ modal_form("modalRouteSummary", "Route Summary", "/routesummary", [
+    {"name": "route_id", "label": "Route ID", "placeholder": "R1"}
+], "Load summary") }}
+
+<div class="modal fade app-modal" id="modalSystem" tabindex="-1" aria-labelledby="modalSystemTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">Control panel</p>
+                    <h2 class="modal-title h4" id="modalSystemTitle">System Controls</h2>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="control-grid">
+                    <button class="control-tile" type="button" data-get="/status">
+                        <i data-lucide="activity"></i>
+                        <span>Status</span>
+                    </button>
+                    <button class="control-tile" type="button" data-post="/exit" data-refresh="true">
+                        <i data-lucide="power-off"></i>
+                        <span>Exit</span>
+                    </button>
+                    <button class="control-tile" type="button" data-post="/restart" data-refresh="true">
+                        <i data-lucide="rotate-cw"></i>
+                        <span>Restart</span>
+                    </button>
+                    <button class="control-tile danger" type="button" data-post="/resetdata" data-refresh="true">
+                        <i data-lucide="database-backup"></i>
+                        <span>Reset Data</span>
+                    </button>
+                </div>
+                <div class="result-panel mt-3" id="systemResult"></div>
+            </div>
+        </div>
+    </div>
+</div>

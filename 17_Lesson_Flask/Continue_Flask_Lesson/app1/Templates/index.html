@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{pagetitle}}</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    </head>
+    <body>
+        <h1 id='button'>{{name}}</h1>
+        <p>Welcome to the Pharmacy application!</p>
+        {% for i in range(0,5)%}
+        <p>This is a simple paragraph.</p>
+        {% endfor %}
+        {% if name== "Ms-Pharmacy" %}
+        <p>This is a special message for Ms-Pharmacy.</p>
+        {% else %}
+        <p>This is a message for all other users.</p>
+        {% endif %}
+
+        
+    </body>
+</html>

@@ -1,0 +1,13 @@
+body{
+    background-color: lightblue;
+}
+
+#button{
+    background-color:white;
+    color:blue;
+    padding: 10px;
+    height: 50px;
+    width: 250px;
+    border-radius: 20px;
+    text-align: center;
+}

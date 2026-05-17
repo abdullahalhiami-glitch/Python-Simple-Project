@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="page-hero contact-hero">
+    <div class="container">
+        <p class="eyebrow">Contact operations</p>
+        <h1>Need a route, passenger update, or dispatch answer?</h1>
+        <p>Reach the Al-Hiami Transportation team or use the live tools to search routes, check capacity, and book instantly.</p>
+    </div>
+</header>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7" data-aos="fade-up">
+                <form class="contact-form" id="contactForm">
+                    <div class="section-heading">
+                        <p class="eyebrow">Message center</p>
+                        <h2>Send a request</h2>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="contactName">Name</label>
+                            <input class="form-control" id="contactName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="contactEmail">Email</label>
+                            <input class="form-control" id="contactEmail" type="email" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="contactSubject">Subject</label>
+                            <input class="form-control" id="contactSubject" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="contactMessage">Message</label>
+                            <textarea class="form-control" id="contactMessage" rows="5" required></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-brand mt-4" type="submit"><i data-lucide="send"></i> Send message</button>
+                </form>
+            </div>
+            <div class="col-lg-5" data-aos="fade-left">
+                <div class="contact-stack">
+                    <article><i data-lucide="phone"></i><div><strong>Phone</strong><span>+967 776 709 263</span></div></article>
+                    <article><i data-lucide="mail"></i><div><strong>Email</strong><span>operations@alhiami.local</span></div></article>
+                    <article><i data-lucide="map-pin"></i><div><strong>Address</strong><span>Yemen, Ibb</span></div></article>
+                    <article><i data-lucide="radio"></i><div><strong>Emergency dispatch</strong><span>24/7 operational response</span></div></article>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7" data-aos="fade-right">
+                <div class="map-placeholder">
+                    <div class="map-grid"></div>
+                    <div class="map-pin"><i data-lucide="navigation"></i></div>
+                    <span>Ibb Operations Hub</span>
+                </div>
+            </div>
+            <div class="col-lg-5" data-aos="fade-left">
+                <div class="chat-mock">
+                    <div class="chat-header">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Al-Hiami logo">
+                        <div><strong>Live chat</strong><small>Dispatch assistant</small></div>
+                    </div>
+                    <div class="chat-bubble bot">Hello. I can help with routes, seats, bookings, and revenue.</div>
+                    <div class="chat-bubble user">Check routes to Sana'a.</div>
+                    <button class="btn btn-soft w-100" data-bs-toggle="modal" data-bs-target="#modalRoutesDestination">Open destination search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

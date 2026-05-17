@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{Transportation_System}} | Al-Hiami Transport</title>
+    <!-- Modern Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-accent">Al-Hiami</span> Transport
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/information">Information</a></li>
+            <li><a href="/contactus">Contact Us</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="#booking" class="btn btn-outline">Book Now</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Experience the Future of <span>Transit</span></h1>
+            <p class="hero-subtitle">Seamless booking, real-time routing, and premium comfort. Your journey begins with Al-Hiami Transportation App.</p>
+            <div class="hero-buttons">
+                <a href="#routes" class="btn btn-primary">Explore Routes</a>
+                <a href="#booking" class="btn btn-secondary">Manage Bookings</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services / Stats Section -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="icon">🚀</div>
+            <h3>High Speed</h3>
+            <p>Reach your destination faster with our optimized, direct routes.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🛡️</div>
+            <h3>Secure Travel</h3>
+            <p>Top-tier safety protocols ensuring your peace of mind.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🎫</div>
+            <h3>Easy Booking</h3>
+            <p>Interactive platform for 1-click reservations and management.</p>
+        </div>
+    </section>
+
+    <!-- Interactive App Section -->
+    <section class="app-dashboard" id="routes">
+        <div class="section-header">
+            <h2>Live Network Dashboard</h2>
+            <p>View, search, and manage routes interactively.</p>
+        </div>
+
+        <div class="dashboard-container">
+            <!-- Sidebar Controls -->
+            <div class="dashboard-sidebar glass-panel">
+                <h3>Actions</h3>
+                <button class="action-btn active" data-target="view-routes">View All Routes</button>
+                <button class="action-btn" data-target="search-route">Search Destination</button>
+                <button class="action-btn" data-target="book-ticket">Book Ticket</button>
+                <button class="action-btn" data-target="cancel-ticket">Cancel Booking</button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="dashboard-content glass-panel">
+                <!-- View Routes Pane -->
+                <div class="pane active" id="view-routes">
+                    <h3>Available Routes</h3>
+                    <button id="loadRoutesBtn" class="btn btn-primary btn-sm">Refresh Routes</button>
+                    <div class="routes-grid" id="routesGrid">
+                        <!-- Populated by JS -->
+                        <div class="placeholder-text">Click "Refresh Routes" to load active transportation lines.</div>
+                    </div>
+                </div>
+
+                <!-- Search Pane -->
+                <div class="pane" id="search-route">
+                    <h3>Find Your Destination</h3>
+                    <form id="searchForm" class="interactive-form">
+                        <div class="input-group">
+                            <label for="searchDest">Destination Name</label>
+                            <input type="text" id="searchDest" name="destination" placeholder="e.g. Sana'a" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                    <div id="searchResults" class="results-container"></div>
+                </div>
+
+                <!-- Book Ticket Pane -->
+                <div class="pane" id="book-ticket">
+                    <h3>Book a Ticket</h3>
+                    <form id="bookForm" class="interactive-form">
+                        <div class="input-group">
+                            <label for="bookRouteId">Route ID</label>
+                            <input type="text" id="bookRouteId" name="route_id" placeholder="e.g. R1" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="passengerName">Passenger Name</label>
+                            <input type="text" id="passengerName" name="passenger_name" placeholder="Your Full Name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    </form>
+                    <div id="bookResult" class="form-feedback"></div>
+                </div>
+
+                <!-- Cancel Ticket Pane -->
+                <div class="pane" id="cancel-ticket">
+                    <h3>Cancel Booking</h3>
+                    <form id="cancelForm" class="interactive-form">
+                        <div class="input-group">
+                            <label for="cancelRouteId">Route ID</label>
+                            <input type="text" id="cancelRouteId" name="route_id" placeholder="e.g. R1" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="cancelPassengerName">Passenger Name</label>
+                            <input type="text" id="cancelPassengerName" name="passenger_name" placeholder="Your Full Name" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Cancel Booking</button>
+                    </form>
+                    <div id="cancelResult" class="form-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Al-Hiami Transport</h3>
+                <p>The premier transportation solution powering Yemen and beyond.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about">About</a>
+                <a href="/contactus">Contact</a>
+                <a href="/information">Info</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Al-Hiami Transportation App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- App Logic -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

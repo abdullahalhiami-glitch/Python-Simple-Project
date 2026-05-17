@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Al-Hiami Transportation — Premium transportation management across Yemen. Book routes, track passengers, monitor revenue." />
+  <meta name="keywords" content="Al-Hiami Transportation, Yemen transportation, route booking, passenger management" />
+  <meta name="author" content="Al-Hiami Transportation" />
+  <meta property="og:title" content="{{ Transportation_System }}" />
+  <meta property="og:description" content="Premium transportation solutions across Yemen." />
+  <meta property="og:type" content="website" />
+  <title>{{ Transportation_System }}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- AOS Animations -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       LOADING SCREEN
+  ═══════════════════════════════════════════ -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-inner">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Al-Hiami Logo" class="loading-logo" />
+      <div class="loading-bar"><div class="loading-fill"></div></div>
+      <p class="loading-text">Loading Al-Hiami Transportation...</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <nav id="main-nav" class="navbar">
+    <div class="nav-container">
+      <!-- Brand -->
+      <a href="/" class="nav-brand">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Al-Hiami Logo" class="nav-logo" />
+        <span class="nav-brand-text">Al-<span class="accent">Hiami</span></span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+          <i class="bi bi-house-fill"></i> Home
+        </a></li>
+        <li><a href="/about" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">
+          <i class="bi bi-info-circle-fill"></i> About
+        </a></li>
+        <li><a href="/information" class="nav-link {% if request.endpoint == 'information' %}active{% endif %}">
+          <i class="bi bi-bar-chart-fill"></i> Dashboard
+        </a></li>
+        <li><a href="/contactus" class="nav-link {% if request.endpoint == 'contactus' %}active{% endif %}">
+          <i class="bi bi-envelope-fill"></i> Contact
+        </a></li>
+      </ul>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Status Badge -->
+        <div class="status-badge" id="nav-status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">Live</span>
+        </div>
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle theme">
+          <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+        </button>
+        <!-- Book Now CTA -->
+        <button class="btn btn-primary nav-cta" onclick="openModal('bookingModal')">
+          <i class="bi bi-ticket-fill"></i> Book Now
+        </button>
+        <!-- Mobile Hamburger -->
+        <button class="hamburger" id="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mobile-menu-inner">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="mobile-logo" />
+        <a href="/" class="mobile-link"><i class="bi bi-house-fill"></i> Home</a>
+        <a href="/about" class="mobile-link"><i class="bi bi-info-circle-fill"></i> About</a>
+        <a href="/information" class="mobile-link"><i class="bi bi-bar-chart-fill"></i> Dashboard</a>
+        <a href="/contactus" class="mobile-link"><i class="bi bi-envelope-fill"></i> Contact</a>
+        <button class="btn btn-primary w-full mt-2" onclick="openModal('bookingModal'); closeMobileMenu()">
+          <i class="bi bi-ticket-fill"></i> Book a Ticket
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       TOAST NOTIFICATIONS
+  ═══════════════════════════════════════════ -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ═══════════════════════════════════════════
+       PAGE CONTENT
+  ═══════════════════════════════════════════ -->
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       GLOBAL MODALS
+  ═══════════════════════════════════════════ -->
+
+  <!-- BOOKING MODAL -->
+  <div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-label="Book a Ticket">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-ticket-perforated-fill modal-icon"></i>
+          <h2 class="modal-title">Book a Ticket</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('bookingModal')" aria-label="Close">&times;</button>
+      </div>
+      <form id="bookingForm" class="modal-body" onsubmit="handleBookTicket(event)">
+        <div class="form-group">
+          <label class="form-label" for="book-route-id">Route ID</label>
+          <input type="text" id="book-route-id" name="route_id" class="form-input" placeholder="e.g. R1" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="book-passenger">Passenger Name</label>
+          <input type="text" id="book-passenger" name="passenger_name" class="form-input" placeholder="Full name" required />
+        </div>
+        <div class="modal-result" id="bookResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('bookingModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="bookSubmitBtn">
+            <i class="bi bi-check-circle-fill"></i> Confirm Booking
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CANCEL BOOKING MODAL -->
+  <div class="modal-overlay" id="cancelModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-x-circle-fill modal-icon" style="color: var(--danger)"></i>
+          <h2 class="modal-title">Cancel Booking</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('cancelModal')">&times;</button>
+      </div>
+      <form id="cancelForm" class="modal-body" onsubmit="handleCancelBooking(event)">
+        <div class="form-group">
+          <label class="form-label" for="cancel-route-id">Route ID</label>
+          <input type="text" id="cancel-route-id" name="route_id" class="form-input" placeholder="e.g. R1" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cancel-passenger">Passenger Name</label>
+          <input type="text" id="cancel-passenger" name="passenger_name" class="form-input" placeholder="Full name" required />
+        </div>
+        <div class="modal-result" id="cancelResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('cancelModal')">Back</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-x-circle-fill"></i> Cancel Booking
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD ROUTE MODAL -->
+  <div class="modal-overlay" id="addRouteModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-plus-circle-fill modal-icon"></i>
+          <h2 class="modal-title">Add New Route</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('addRouteModal')">&times;</button>
+      </div>
+      <form id="addRouteForm" class="modal-body" onsubmit="handleAddRoute(event)">
+        <div class="form-group">
+          <label class="form-label" for="add-route-id">Route ID</label>
+          <input type="text" id="add-route-id" name="route_id" class="form-input" placeholder="e.g. R6" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-destination">Destination</label>
+          <input type="text" id="add-destination" name="destination" class="form-input" placeholder="e.g. Marib" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="add-capacity">Capacity (1–200)</label>
+          <input type="number" id="add-capacity" name="capacity" class="form-input" placeholder="e.g. 30" min="1" max="200" required />
+        </div>
+        <div class="modal-result" id="addRouteResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('addRouteModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Route</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE ROUTE MODAL -->
+  <div class="modal-overlay" id="deleteRouteModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-trash3-fill modal-icon" style="color: var(--danger)"></i>
+          <h2 class="modal-title">Delete Route</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('deleteRouteModal')">&times;</button>
+      </div>
+      <form id="deleteRouteForm" class="modal-body" onsubmit="handleDeleteRoute(event)">
+        <p class="form-hint">⚠️ This will permanently remove the route and all its data.</p>
+        <div class="form-group">
+          <label class="form-label" for="del-route-id">Route ID to Delete</label>
+          <input type="text" id="del-route-id" name="route_id" class="form-input" placeholder="e.g. R3" required />
+        </div>
+        <div class="modal-result" id="deleteRouteResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('deleteRouteModal')">Cancel</button>
+          <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Delete Route</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SEARCH ROUTE MODAL -->
+  <div class="modal-overlay" id="searchRouteModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-search modal-icon"></i>
+          <h2 class="modal-title">Search Route</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('searchRouteModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="switchSearchTab('byId', this)">By Route ID</button>
+          <button class="search-tab" onclick="switchSearchTab('byDestination', this)">By Destination</button>
+        </div>
+        <!-- By ID -->
+        <div id="search-byId" class="search-panel">
+          <form onsubmit="handleSearchRoute(event)">
+            <div class="input-row">
+              <input type="text" id="search-route-id" class="form-input" placeholder="Enter Route ID (e.g. R1)" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <!-- By Destination -->
+        <div id="search-byDestination" class="search-panel hidden">
+          <form onsubmit="handleSearchByDestination(event)">
+            <div class="input-row">
+              <input type="text" id="search-dest-input" class="form-input" placeholder="Enter destination name" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <div id="searchRouteResult" class="modal-result mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEAT AVAILABILITY MODAL -->
+  <div class="modal-overlay" id="seatModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-person-check-fill modal-icon"></i>
+          <h2 class="modal-title">Check Seat Availability</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('seatModal')">&times;</button>
+      </div>
+      <form id="seatForm" class="modal-body" onsubmit="handleCheckSeats(event)">
+        <div class="form-group">
+          <label class="form-label" for="seat-route-id">Route ID</label>
+          <input type="text" id="seat-route-id" name="route_id" class="form-input" placeholder="e.g. R1" required />
+        </div>
+        <div class="modal-result" id="seatResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('seatModal')">Close</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-person-check-fill"></i> Check Seats</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PASSENGER LIST MODAL -->
+  <div class="modal-overlay" id="passengerModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-people-fill modal-icon"></i>
+          <h2 class="modal-title">Passenger List</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('passengerModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="switchPassengerTab('byRoute', this)">By Route</button>
+          <button class="search-tab" onclick="switchPassengerTab('byDestination', this)">By Destination</button>
+        </div>
+        <div id="pass-byRoute" class="search-panel">
+          <form onsubmit="handleGetPassengers(event, 'route')">
+            <div class="input-row">
+              <input type="text" id="pass-route-id" class="form-input" placeholder="Route ID e.g. R1" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <div id="pass-byDestination" class="search-panel hidden">
+          <form onsubmit="handleGetPassengers(event, 'destination')">
+            <div class="input-row">
+              <input type="text" id="pass-dest" class="form-input" placeholder="Destination name" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <div id="passengerResult" class="modal-result mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVENUE MODAL -->
+  <div class="modal-overlay" id="revenueModal" role="dialog" aria-modal="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <i class="bi bi-cash-coin modal-icon" style="color: var(--success)"></i>
+          <h2 class="modal-title">Calculate Revenue</h2>
+        </div>
+        <button class="modal-close" onclick="closeModal('revenueModal')">&times;</button>
+      </div>
+      <form id="revenueForm" class="modal-body" onsubmit="handleCalculateRevenue(event)">
+        <div class="form-group">
+          <label class="form-label" for="rev-route-id">Route ID</label>
+          <input type="text" id="rev-route-id" name="route_id" class="form-input" placeholder="e.g. R1" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rev-price">Ticket Price (USD)</label>
+          <input type="number" id="rev-price" name="ticket_price" class="form-input" value="50" min="1" required />
+        </div>
+        <div class="modal-result" id="revenueResult"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('revenueModal')">Close</button>
+          <button type="submit" class="btn btn-success"><i class="bi bi-calculator-fill"></i> Calculate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Al-Hiami Logo" class="footer-logo" />
+        <p class="footer-tagline">Moving Yemen Forward — Premium Transportation Solutions</p>
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Navigation</h4>
+        <a href="/" class="footer-link">Home</a>
+        <a href="/about" class="footer-link">About Us</a>
+        <a href="/information" class="footer-link">Dashboard</a>
+        <a href="/contactus" class="footer-link">Contact</a>
+      </div>
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Services</h4>
+        <a href="#" class="footer-link" onclick="openModal('bookingModal'); return false;">Book Ticket</a>
+        <a href="#" class="footer-link" onclick="openModal('searchRouteModal'); return false;">Search Routes</a>
+        <a href="#" class="footer-link" onclick="openModal('seatModal'); return false;">Seat Availability</a>
+        <a href="#" class="footer-link" onclick="openModal('revenueModal'); return false;">Revenue Calculator</a>
+      </div>
+      <div class="footer-links-group">
+        <h4 class="footer-heading">Contact</h4>
+        <p class="footer-contact"><i class="bi bi-telephone-fill"></i> +967 123 456 789</p>
+        <p class="footer-contact"><i class="bi bi-envelope-fill"></i> info@alhiami.ye</p>
+        <p class="footer-contact"><i class="bi bi-geo-alt-fill"></i> Sana'a, Yemen</p>
+        <div class="footer-status" id="footer-status">
+          <span class="status-dot"></span> System Online
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Al-Hiami Transportation. All rights reserved.</p>
+      <p>Built with <i class="bi bi-heart-fill" style="color:var(--danger)"></i> in Yemen</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════ -->
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Swiper -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Main JS -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

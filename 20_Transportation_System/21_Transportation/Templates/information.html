@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{Transportation_System}} | Al-Hiami Transport</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-content {
+            padding: 120px 10% 80px;
+            min-height: 70vh;
+        }
+        .page-header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 3rem;
+        }
+        .content-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-accent">Al-Hiami</span> Transport
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/information">Information</a></li>
+            <li><a href="/contactus">Contact Us</a></li>
+        </ul>
+        <div class="nav-cta">
+            <a href="/#booking" class="btn btn-outline">Book Now</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="page-header">
+            <h1>{{name}}</h1>
+        </div>
+        <div class="content-box">
+            <h2>Request More Information</h2>
+            <p style="margin-bottom: 20px;">Leave your name below to receive our informational newsletter and updates about new routes.</p>
+            <form action="/submit" class="interactive-form">
+                <div class="input-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Al-Hiami Transport</h3>
+                <p>The premier transportation solution powering Yemen and beyond.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/about">About</a>
+                <a href="/contactus">Contact</a>
+                <a href="/information">Info</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Al-Hiami Transportation App. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

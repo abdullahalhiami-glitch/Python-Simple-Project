@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Al-Hiami Transportation system information — view all routes, destinations, and system status.">
+  <title>{{Transportation_System}} | Information</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="/" class="nav-brand">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="url(#g1)"/><path d="M8 22V12a2 2 0 012-2h12a2 2 0 012 2v10" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="22" r="2" fill="#fff"/><circle cx="20" cy="22" r="2" fill="#fff"/><path d="M8 16h16M14 10v6" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#0ea5e9"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs></svg>
+      Al-Hiami Transport
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/contactus">Contact</a>
+      <a href="/information" class="active">Info</a>
+      <a href="/" class="nav-cta">🎫 Book Now</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>System Information</h1>
+    <p>View real-time data about all routes, destinations, and the overall system status.</p>
+  </section>
+
+  <!-- INFO CONTENT -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-label">📊 Live Dashboard</div>
+      <h2>System Overview</h2>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="features-grid" style="margin-bottom:3rem;">
+      <div class="feature-card fade-up" id="infoStatusCard">
+        <div class="feature-icon">⚡</div>
+        <h3>System Status</h3>
+        <p id="infoStatus" style="font-size:1.1rem;font-weight:700;color:var(--success);">Checking...</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🗺️</div>
+        <h3>Total Routes</h3>
+        <p id="infoRouteCount" style="font-size:1.8rem;font-weight:800;color:var(--primary-light);">—</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📍</div>
+        <h3>Destinations</h3>
+        <p id="infoDestCount" style="font-size:1.8rem;font-weight:800;color:var(--accent);">—</p>
+      </div>
+    </div>
+
+    <!-- All Routes Table -->
+    <div class="panel fade-up" style="margin-bottom:2rem;">
+      <div class="panel-title">🗺️ All Routes</div>
+      <div id="infoRoutesList" class="result-box" style="min-height:80px;">
+        <p style="color:var(--text-muted);">Loading routes...</p>
+      </div>
+    </div>
+
+    <!-- All Destinations -->
+    <div class="panel fade-up" style="margin-bottom:2rem;">
+      <div class="panel-title">📍 All Destinations</div>
+      <div id="infoDestList" class="result-box" style="min-height:80px;">
+        <p style="color:var(--text-muted);">Loading destinations...</p>
+      </div>
+    </div>
+
+    <!-- Quick Search -->
+    <div class="panel fade-up">
+      <div class="panel-title">🔍 Quick Route Lookup</div>
+      <div class="form-group">
+        <label for="infoSearchInput">Enter Route ID or Destination</label>
+        <input type="text" id="infoSearchInput" placeholder="e.g. R1 or Sana'a">
+      </div>
+      <button class="btn btn-accent" onclick="infoSearch()" style="width:100%;justify-content:center;margin-bottom:1rem;">🔍 Search</button>
+      <div class="result-box" id="infoSearchResults">
+        <p style="color:var(--text-muted);">Results will appear here...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>🚌 Al-Hiami Transport</h3>
+        <p>Your trusted partner for safe and comfortable transportation across Yemen.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul><li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/contactus">Contact</a></li><li><a href="/information">Info</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul><li><a href="mailto:gasstation@gmail.com">📧 gasstation@gmail.com</a></li><li>📞 +976 776 709 263</li><li>📍 Yemen, Ibb</li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Al-Hiami Transportation. All rights reserved.</span>
+      <span>Designed by Abdullah Al-Hiami</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script>
+    // Info page specific logic
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load status
+      try {
+        const res = await fetch('/status');
+        const json = await res.json();
+        const el = document.getElementById('infoStatus');
+        el.textContent = json.status;
+        el.style.color = json.status === 'Running' ? 'var(--success)' : 'var(--danger)';
+      } catch(e) { document.getElementById('infoStatus').textContent = 'Unavailable'; }
+
+      // Load routes
+      try {
+        const res = await fetch('/viewallroutes');
+        const json = await res.json();
+        document.getElementById('infoRouteCount').textContent = json.routes.length;
+        document.getElementById('infoRoutesList').innerHTML = json.routes.map(r =>
+          `<div class="result-item" style="display:flex;align-items:center;gap:0.5rem;"><span class="route-id">${r}</span></div>`
+        ).join('');
+      } catch(e) {}
+
+      // Load destinations
+      try {
+        const res = await fetch('/viewalldestinations');
+        const json = await res.json();
+        document.getElementById('infoDestCount').textContent = json.destinations.length;
+        document.getElementById('infoDestList').innerHTML = json.destinations.map(d =>
+          `<div class="result-item">📍 ${d}</div>`
+        ).join('');
+      } catch(e) {}
+    });
+
+    async function infoSearch() {
+      const q = document.getElementById('infoSearchInput').value.trim();
+      const box = document.getElementById('infoSearchResults');
+      if (!q) { showToast('Enter a Route ID or Destination', 'error'); return; }
+      box.innerHTML = '<p style="color:var(--text-muted);">Searching...</p>';
+      try {
+        let data = new FormData(); data.append('route_id', q);
+        let res = await fetch('/searchroute', { method: 'POST', body: data });
+        if (res.ok) {
+          const r = await res.json();
+          const total = r.Capacity + r.Booked.length;
+          box.innerHTML = `<div class="result-item"><strong>${r.Route_Id}</strong> → ${r.Destination}</div>
+            <div class="result-item">Capacity: ${total} | Available: ${r.Capacity} | Booked: ${r.Booked.length}</div>
+            <div class="result-item">Passengers: ${r.Booked.length > 0 ? r.Booked.join(', ') : 'None yet'}</div>`;
+          return;
+        }
+        data = new FormData(); data.append('destination', q);
+        res = await fetch('/searchroutebydestination', { method: 'POST', body: data });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.routes && json.routes.length > 0) {
+            box.innerHTML = json.routes.map(r => {
+              const total = r.Capacity + r.Booked.length;
+              return `<div class="result-item"><strong>${r.Route_Id}</strong> → ${r.Destination} | Available: ${r.Capacity}/${total}</div>`;
+            }).join('');
+            return;
+          }
+        }
+        box.innerHTML = '<p style="color:var(--danger);">No results found.</p>';
+      } catch(e) { box.innerHTML = '<p style="color:var(--danger);">Search failed.</p>'; }
+    }
+  </script>
+</body>
+</html>

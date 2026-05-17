@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <div class="page-hero-badge" data-aos="fade-down">Live Data</div>
+    <h1 class="page-hero-title" data-aos="fade-up" data-aos-delay="100">
+      Operations <span class="gradient-text">Dashboard</span>
+    </h1>
+    <p class="page-hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+      Real-time transportation analytics, route management, and passenger data
+    </p>
+  </div>
+</section>
+
+<section class="section dashboard-section">
+  <div class="container">
+
+    <!-- ═══ KPI CARDS ═══ -->
+    <div class="kpi-grid" data-aos="fade-up">
+      <div class="kpi-card glass-card kpi-blue">
+        <div class="kpi-icon"><i class="bi bi-signpost-2-fill"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number" data-target="{{ stats.total_routes }}">0</span>
+          <span class="kpi-label">Total Routes</span>
+        </div>
+        <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> Active</div>
+      </div>
+      <div class="kpi-card glass-card kpi-cyan">
+        <div class="kpi-icon"><i class="bi bi-geo-alt-fill"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number" data-target="{{ stats.total_destinations }}">0</span>
+          <span class="kpi-label">Destinations</span>
+        </div>
+        <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> Connected</div>
+      </div>
+      <div class="kpi-card glass-card kpi-green">
+        <div class="kpi-icon"><i class="bi bi-person-check-fill"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number" data-target="{{ stats.total_bookings }}">0</span>
+          <span class="kpi-label">Total Bookings</span>
+        </div>
+        <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> Booked</div>
+      </div>
+      <div class="kpi-card glass-card kpi-emerald">
+        <div class="kpi-icon"><i class="bi bi-cash-coin"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number currency" data-target="{{ stats.total_revenue }}">0</span>
+          <span class="kpi-label">Revenue (USD)</span>
+        </div>
+        <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> Earned</div>
+      </div>
+      <div class="kpi-card glass-card kpi-purple">
+        <div class="kpi-icon"><i class="bi bi-seat-fill"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number" data-target="{{ stats.available_seats }}">0</span>
+          <span class="kpi-label">Available Seats</span>
+        </div>
+        <div class="kpi-trend neutral"><i class="bi bi-dash"></i> Open</div>
+      </div>
+      <div class="kpi-card glass-card kpi-orange">
+        <div class="kpi-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <div class="kpi-data">
+          <span class="kpi-number" data-target="{{ stats.utilization_pct }}">0</span>
+          <span class="kpi-label">Utilization %</span>
+        </div>
+        <div class="kpi-trend {% if stats.utilization_pct > 50 %}up{% else %}down{% endif %}">
+          <i class="bi bi-arrow-{% if stats.utilization_pct > 50 %}up{% else %}down{% endif %}-right"></i>
+          Capacity
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ROUTE TABLE + CHART ═══ -->
+    <div class="dashboard-main-grid" data-aos="fade-up" data-aos-delay="100">
+
+      <!-- Route Data Table -->
+      <div class="dashboard-table-card glass-card">
+        <div class="card-header-row">
+          <h3 class="card-title"><i class="bi bi-table"></i> Route Overview</h3>
+          <div class="card-actions">
+            <input type="text" id="table-search" class="form-input form-input-sm" placeholder="Search..." oninput="filterTable(this.value)" />
+            <button class="btn btn-primary btn-sm" onclick="openModal('addRouteModal')">
+              <i class="bi bi-plus"></i> Add
+            </button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="route-table">
+            <thead>
+              <tr>
+                <th>Route ID</th>
+                <th>Destination</th>
+                <th>Capacity</th>
+                <th>Booked</th>
+                <th>Available</th>
+                <th>Utilization</th>
+                <th>Revenue</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="route-table-body">
+              {% for route in routes %}
+              {% set booked = route.Booked | length %}
+              {% set utilization = ((booked / route.Total_Capacity) * 100) | round(1) if route.Total_Capacity > 0 else 0 %}
+              <tr data-search="{{ route.Route_Id }} {{ route.Destination }}">
+                <td><span class="badge badge-blue">{{ route.Route_Id }}</span></td>
+                <td><strong>{{ route.Destination }}</strong></td>
+                <td>{{ route.Total_Capacity }}</td>
+                <td>{{ booked }}</td>
+                <td>
+                  <span class="badge {% if route.Capacity > 0 %}badge-green{% else %}badge-red{% endif %}">
+                    {{ route.Capacity }}
+                  </span>
+                </td>
+                <td>
+                  <div class="mini-progress">
+                    <div class="mini-progress-fill {% if utilization > 80 %}danger{% elif utilization > 50 %}warning{% else %}good{% endif %}"
+                         style="width: {{ utilization }}%"></div>
+                  </div>
+                  <small>{{ utilization }}%</small>
+                </td>
+                <td>${{ (booked * 50) | int }}</td>
+                <td>
+                  <div class="action-btns">
+                    <button class="icon-btn icon-btn-blue" title="View passengers"
+                            onclick="quickPassengers('{{ route.Route_Id }}')">
+                      <i class="bi bi-people-fill"></i>
+                    </button>
+                    <button class="icon-btn icon-btn-red" title="Delete route"
+                            onclick="prefillDelete('{{ route.Route_Id }}')">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="8" class="empty-table">No routes found. <button class="link-btn" onclick="openModal('addRouteModal')">Add one</button></td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="dashboard-chart-card glass-card">
+        <div class="card-header-row">
+          <h3 class="card-title"><i class="bi bi-pie-chart-fill"></i> Seat Distribution</h3>
+        </div>
+        <canvas id="seatChart" height="260"></canvas>
+        <div class="chart-legend" id="chart-legend"></div>
+      </div>
+    </div>
+
+    <!-- ═══ INTERACTIVE TOOLS ROW ═══ -->
+    <div class="tools-grid" data-aos="fade-up" data-aos-delay="200">
+      <!-- Search Tool -->
+      <div class="tool-card glass-card">
+        <h3 class="tool-title"><i class="bi bi-search"></i> Route Finder</h3>
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="switchSearchTab('byId', this, 'info-')">By ID</button>
+          <button class="search-tab" onclick="switchSearchTab('byDestination', this, 'info-')">By Destination</button>
+        </div>
+        <div id="info-search-byId" class="search-panel">
+          <form onsubmit="handleSearchRouteInfo(event)">
+            <div class="input-row">
+              <input type="text" id="info-search-route-id" class="form-input" placeholder="Route ID" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <div id="info-search-byDestination" class="search-panel hidden">
+          <form onsubmit="handleSearchDestInfo(event)">
+            <div class="input-row">
+              <input type="text" id="info-search-dest" class="form-input" placeholder="Destination" />
+              <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <div id="infoSearchResult" class="modal-result mt-2"></div>
+      </div>
+
+      <!-- Seat Availability Tool -->
+      <div class="tool-card glass-card">
+        <h3 class="tool-title"><i class="bi bi-person-check-fill"></i> Seat Checker</h3>
+        <form onsubmit="handleInfoSeats(event)">
+          <div class="form-group">
+            <input type="text" id="info-seat-route" class="form-input" placeholder="Enter Route ID" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-full">Check Availability</button>
+        </form>
+        <div id="infoSeatResult" class="modal-result mt-2"></div>
+      </div>
+
+      <!-- Revenue Tool -->
+      <div class="tool-card glass-card">
+        <h3 class="tool-title"><i class="bi bi-cash-coin"></i> Revenue Calculator</h3>
+        <form onsubmit="handleInfoRevenue(event)">
+          <div class="form-group">
+            <input type="text" id="info-rev-route" class="form-input" placeholder="Route ID" required />
+          </div>
+          <div class="form-group">
+            <input type="number" id="info-rev-price" class="form-input" value="50" placeholder="Price/ticket (USD)" required />
+          </div>
+          <button type="submit" class="btn btn-success w-full"><i class="bi bi-calculator"></i> Calculate</button>
+        </form>
+        <div id="infoRevenueResult" class="modal-result mt-2"></div>
+      </div>
+
+      <!-- Passenger List Tool -->
+      <div class="tool-card glass-card">
+        <h3 class="tool-title"><i class="bi bi-people-fill"></i> Passenger Lookup</h3>
+        <form onsubmit="handleInfoPassengers(event)">
+          <div class="form-group">
+            <input type="text" id="info-pass-route" class="form-input" placeholder="Route ID" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-full"><i class="bi bi-people-fill"></i> Get Passengers</button>
+        </form>
+        <div id="infoPassengerResult" class="modal-result mt-2"></div>
+      </div>
+    </div>
+
+    <!-- ═══ DESTINATIONS SECTION ═══ -->
+    <div class="destinations-card glass-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="card-header-row">
+        <h3 class="card-title"><i class="bi bi-geo-alt-fill"></i> All Destinations</h3>
+        <button class="btn btn-outline btn-sm" onclick="loadDestinations()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+      </div>
+      <div class="destinations-tags" id="destinations-tags">
+        {% for route in routes %}
+        <span class="dest-tag" onclick="quickSearchDest('{{ route.Destination }}')">
+          <i class="bi bi-geo-alt-fill"></i> {{ route.Destination }}
+          <span class="dest-count">{{ route.Booked | length }} booked</span>
+        </span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- ═══ BOOKING MANAGEMENT ═══ -->
+    <div class="booking-management-grid" data-aos="fade-up" data-aos-delay="350">
+      <div class="booking-action-card glass-card">
+        <div class="booking-action-icon bg-blue"><i class="bi bi-ticket-perforated-fill"></i></div>
+        <h3>Book a Ticket</h3>
+        <p>Add a new passenger to any available route</p>
+        <button class="btn btn-primary w-full" onclick="openModal('bookingModal')">
+          <i class="bi bi-ticket-fill"></i> Book Now
+        </button>
+      </div>
+      <div class="booking-action-card glass-card">
+        <div class="booking-action-icon bg-red"><i class="bi bi-x-circle-fill"></i></div>
+        <h3>Cancel Booking</h3>
+        <p>Remove a passenger and free their seat</p>
+        <button class="btn btn-danger w-full" onclick="openModal('cancelModal')">
+          <i class="bi bi-x-circle-fill"></i> Cancel
+        </button>
+      </div>
+      <div class="booking-action-card glass-card">
+        <div class="booking-action-icon bg-green"><i class="bi bi-plus-circle-fill"></i></div>
+        <h3>Add Route</h3>
+        <p>Create a new transportation route</p>
+        <button class="btn btn-success w-full" onclick="openModal('addRouteModal')">
+          <i class="bi bi-plus-circle"></i> Add Route
+        </button>
+      </div>
+      <div class="booking-action-card glass-card">
+        <div class="booking-action-icon bg-purple"><i class="bi bi-trash3-fill"></i></div>
+        <h3>Delete Route</h3>
+        <p>Remove a route from the network</p>
+        <button class="btn btn-outline w-full" onclick="openModal('deleteRouteModal')">
+          <i class="bi bi-trash3-fill"></i> Delete
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// ── Dashboard-specific logic ──────────────────────────────────────
+
+function filterTable(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#route-table-body tr[data-search]').forEach(row => {
+    row.style.display = row.dataset.search.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function prefillDelete(routeId) {
+  document.getElementById('del-route-id').value = routeId;
+  openModal('deleteRouteModal');
+}
+
+function quickPassengers(routeId) {
+  document.getElementById('pass-route-id').value = routeId;
+  openModal('passengerModal');
+  // Auto-submit
+  setTimeout(() => {
+    const form = document.getElementById('pass-byRoute').querySelector('form');
+    if (form) {
+      const evt = new Event('submit', { cancelable: true, bubbles: true });
+      form.dispatchEvent(evt);
+    }
+  }, 200);
+}
+
+function quickSearchDest(dest) {
+  document.getElementById('info-search-dest').value = dest;
+  handleSearchDestInfo(new Event('submit'));
+}
+
+function loadDestinations() {
+  fetch('/viewalldestinations')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        const tags = document.getElementById('destinations-tags');
+        tags.innerHTML = data.data.map(d =>
+          `<span class="dest-tag" onclick="quickSearchDest('${d}')"><i class="bi bi-geo-alt-fill"></i> ${d}</span>`
+        ).join('');
+        showToast('Destinations refreshed', 'success');
+      }
+    });
+}
+
+function handleSearchRouteInfo(e) {
+  e.preventDefault();
+  const id = document.getElementById('info-search-route-id').value.trim();
+  if (!id) return;
+  const result = document.getElementById('infoSearchResult');
+  result.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const fd = new FormData(); fd.append('route_id', id);
+  fetch('/searchroute', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        const d = data.data;
+        result.innerHTML = `<div class="result-card glass-mini">
+          <strong>${d.Route_Id}</strong> → ${d.Destination}<br/>
+          <small>Capacity: ${d.Total_Capacity} | Available: ${d.Capacity} | Booked: ${d.Booked ? d.Booked.length : 0}</small>
+        </div>`;
+      } else {
+        result.innerHTML = `<div class="result-error">${data.message}</div>`;
+      }
+    });
+}
+
+function handleSearchDestInfo(e) {
+  e.preventDefault();
+  const dest = document.getElementById('info-search-dest').value.trim();
+  if (!dest) return;
+  const result = document.getElementById('infoSearchResult');
+  result.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const fd = new FormData(); fd.append('destination', dest);
+  fetch('/searchroutebydestination', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.routes.length > 0) {
+        result.innerHTML = data.routes.map(r =>
+          `<div class="result-card glass-mini"><strong>${r.Route_Id}</strong> → ${r.Destination} | Seats: ${r.Capacity}</div>`
+        ).join('');
+      } else {
+        result.innerHTML = `<div class="result-error">${data.message || 'No routes found.'}</div>`;
+      }
+    });
+}
+
+function handleInfoSeats(e) {
+  e.preventDefault();
+  const id = document.getElementById('info-seat-route').value.trim();
+  if (!id) return;
+  const result = document.getElementById('infoSeatResult');
+  const fd = new FormData(); fd.append('route_id', id);
+  fetch('/checkseatavailability', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.data) {
+        const d = data.data;
+        const pct = Math.round((d.booked_seats / d.total_seats) * 100) || 0;
+        result.innerHTML = `<div class="result-card glass-mini">
+          <strong>${d.route_id}</strong> → ${d.destination}<br/>
+          <div class="mini-progress mt-1"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
+          Available: <strong>${d.available_seats}</strong> / ${d.total_seats} | Booked: ${d.booked_seats}
+        </div>`;
+      } else {
+        result.innerHTML = `<div class="result-error">${data.message}</div>`;
+      }
+    });
+}
+
+function handleInfoRevenue(e) {
+  e.preventDefault();
+  const id = document.getElementById('info-rev-route').value.trim();
+  const price = document.getElementById('info-rev-price').value;
+  if (!id) return;
+  const result = document.getElementById('infoRevenueResult');
+  const fd = new FormData(); fd.append('route_id', id); fd.append('ticket_price', price);
+  fetch('/calculaterouterevenue', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.data) {
+        const d = data.data;
+        result.innerHTML = `<div class="result-success">
+          Route <strong>${d.route_id}</strong> → ${d.destination}<br/>
+          Booked: ${d.booked_seats} × $${d.ticket_price} = <strong>$${d.total_revenue}</strong>
+        </div>`;
+      } else {
+        result.innerHTML = `<div class="result-error">${data.message}</div>`;
+      }
+    });
+}
+
+function handleInfoPassengers(e) {
+  e.preventDefault();
+  const id = document.getElementById('info-pass-route').value.trim();
+  if (!id) return;
+  const result = document.getElementById('infoPassengerResult');
+  const fd = new FormData(); fd.append('route_id', id);
+  fetch('/getpassengerlist', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.data) {
+        const passengers = data.data.passengers;
+        if (passengers.length === 0) {
+          result.innerHTML = '<div class="result-info">No passengers booked on this route.</div>';
+        } else {
+          result.innerHTML = `<div class="result-card glass-mini">
+            <strong>${data.data.route_id}</strong> → ${data.data.destination}<br/>
+            <ul class="passenger-mini-list">${passengers.map(p => `<li><i class="bi bi-person-fill"></i> ${p}</li>`).join('')}</ul>
+          </div>`;
+        }
+      } else {
+        result.innerHTML = `<div class="result-error">${data.message}</div>`;
+      }
+    });
+}
+
+// Build seat distribution chart
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/allroutes')
+    .then(r => r.json())
+    .then(data => {
+      if (!data.success) return;
+      const routes = data.data;
+      const labels = routes.map(r => r.Destination);
+      const booked = routes.map(r => r.Booked.length);
+      const avail = routes.map(r => r.Capacity);
+
+      const colors = ['#3b82f6','#06b6d4','#10b981','#8b5cf6','#f59e0b','#ef4444','#ec4899'];
+
+      const ctx = document.getElementById('seatChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: booked,
+            backgroundColor: colors,
+            borderWidth: 0,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '70%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.label}: ${ctx.parsed} booked`
+              }
+            }
+          }
+        }
+      });
+
+      // Build legend
+      const legend = document.getElementById('chart-legend');
+      legend.innerHTML = labels.map((l, i) =>
+        `<div class="legend-item">
+          <span class="legend-dot" style="background:${colors[i % colors.length]}"></span>
+          <span>${l}</span>
+        </div>`
+      ).join('');
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="page-hero compact-hero">
+    <div class="container">
+        <p class="eyebrow">About the company</p>
+        <h1>Transportation with discipline, speed, and care.</h1>
+        <p>Al-Hiami Transportation combines dependable route operations with a modern digital command center for bookings, passengers, capacity, and performance insight.</p>
+    </div>
+</header>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="story-grid">
+            <article class="story-card" data-aos="fade-up">
+                <span>01</span>
+                <h2>Mission</h2>
+                <p>Make every trip easier to manage, easier to book, and easier to trust by giving operators live control over routes and passengers.</p>
+            </article>
+            <article class="story-card" data-aos="fade-up" data-aos-delay="100">
+                <span>02</span>
+                <h2>Vision</h2>
+                <p>Become a premium transportation brand known for reliable movement, polished digital service, and transparent operational intelligence.</p>
+            </article>
+            <article class="story-card" data-aos="fade-up" data-aos-delay="200">
+                <span>03</span>
+                <h2>Promise</h2>
+                <p>Routes stay clear, capacity stays accurate, bookings stay reversible, and every team member sees the same trusted data.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell timeline-section">
+    <div class="container">
+        <div class="section-heading" data-aos="fade-up">
+            <p class="eyebrow">Service story</p>
+            <h2>From simple route lists to a premium operations layer</h2>
+        </div>
+        <div class="timeline">
+            <div data-aos="fade-right"><strong>Plan</strong><span>Define destinations, capacities, and route IDs.</span></div>
+            <div data-aos="fade-right" data-aos-delay="100"><strong>Book</strong><span>Confirm passengers and protect against overbooking.</span></div>
+            <div data-aos="fade-right" data-aos-delay="200"><strong>Track</strong><span>Monitor lists, available seats, utilization, and revenue.</span></div>
+            <div data-aos="fade-right" data-aos-delay="300"><strong>Scale</strong><span>Persist data locally and keep the interface modular.</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="metric-grid">
+            <article class="metric-card"><i data-lucide="route"></i><span class="counter" data-stat="total_routes" data-count="{{ stats.total_routes }}">0</span><p>Routes online</p></article>
+            <article class="metric-card"><i data-lucide="map"></i><span class="counter" data-stat="total_destinations" data-count="{{ stats.total_destinations }}">0</span><p>Destinations</p></article>
+            <article class="metric-card"><i data-lucide="user-check"></i><span class="counter" data-stat="total_bookings" data-count="{{ stats.total_bookings }}">0</span><p>Active bookings</p></article>
+            <article class="metric-card"><i data-lucide="activity"></i><span class="counter" data-stat="utilization" data-count="{{ stats.utilization }}">0</span><p>Utilization percent</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section-shell">
+    <div class="container">
+        <div class="section-heading centered" data-aos="fade-up">
+            <p class="eyebrow">Why choose us</p>
+            <h2>Premium operations, practical controls</h2>
+        </div>
+        <div class="trust-grid">
+            <article><i data-lucide="clock-3"></i><h3>Responsive</h3><p>Every workflow uses AJAX so operators stay in motion.</p></article>
+            <article><i data-lucide="database"></i><h3>Persistent</h3><p>Routes and bookings survive restarts through JSON storage.</p></article>
+            <article><i data-lucide="accessibility"></i><h3>Accessible</h3><p>Semantic pages, visible states, labels, and responsive layouts.</p></article>
+        </div>
+    </div>
+</section>
+{% endblock %}

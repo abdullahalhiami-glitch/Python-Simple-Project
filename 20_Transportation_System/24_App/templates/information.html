@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="page-hero dashboard-hero">
+    <div class="container">
+        <p class="eyebrow">Operations intelligence</p>
+        <h1>Transportation Analytics Dashboard</h1>
+        <p>Monitor routes, destinations, passengers, capacity, revenue, and system status through live Flask API calls.</p>
+        <div class="hero-actions">
+            <button class="btn btn-brand" data-get="/systemstatistics" data-render-target="#dashboardRoot"><i data-lucide="refresh-cw"></i> Refresh analytics</button>
+            <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#modalSystem"><i data-lucide="settings-2"></i> System controls</button>
+        </div>
+    </div>
+</header>
+
+<section class="dashboard-shell" id="dashboardRoot">
+    <div class="container">
+        <div class="metric-grid dashboard-metrics">
+            <article class="metric-card"><i data-lucide="route"></i><span class="counter" data-stat="total_routes" data-count="{{ stats.total_routes }}">0</span><p>Total routes</p></article>
+            <article class="metric-card"><i data-lucide="map-pin"></i><span class="counter" data-stat="total_destinations" data-count="{{ stats.total_destinations }}">0</span><p>Total destinations</p></article>
+            <article class="metric-card"><i data-lucide="ticket"></i><span class="counter" data-stat="total_bookings" data-count="{{ stats.total_bookings }}">0</span><p>Total bookings</p></article>
+            <article class="metric-card"><i data-lucide="wallet"></i><span class="counter" data-stat="revenue" data-count="{{ stats.revenue }}">0</span><p>Revenue</p></article>
+            <article class="metric-card"><i data-lucide="armchair"></i><span class="counter" data-stat="available_capacity" data-count="{{ stats.available_capacity }}">0</span><p>Capacity remaining</p></article>
+            <article class="metric-card"><i data-lucide="activity"></i><span id="dashboardStatus">Running</span><p>System status</p></article>
+        </div>
+
+        <div class="dashboard-grid mt-4">
+            <section class="dashboard-panel wide" data-aos="fade-up">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Revenue and demand</p>
+                        <h2>Route analytics</h2>
+                    </div>
+                    <button class="btn btn-soft" data-bs-toggle="modal" data-bs-target="#modalRevenue">Calculate revenue</button>
+                </div>
+                <canvas id="revenueChart" height="220"></canvas>
+            </section>
+            <section class="dashboard-panel" data-aos="fade-up" data-aos-delay="100">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Popularity</p>
+                        <h2>Destination ranking</h2>
+                    </div>
+                </div>
+                <canvas id="destinationChart" height="220"></canvas>
+            </section>
+        </div>
+
+        <section class="dashboard-panel mt-4" data-aos="fade-up">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow">Route records</p>
+                    <h2>Interactive route table</h2>
+                </div>
+                <div class="table-actions">
+                    <input class="form-control" id="routeTableSearch" placeholder="Search route or destination">
+                    <button class="btn btn-soft" data-get="/viewallroutes" data-render-target="#routesTableBody">View all routes</button>
+                    <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#modalAddRoute">Add route</button>
+                </div>
+            </div>
+            <div class="responsive-table">
+                <table class="table app-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Destination</th>
+                            <th>Total</th>
+                            <th>Available</th>
+                            <th>Booked</th>
+                            <th>Revenue</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="routesTableBody">
+                        {% for route in stats.routes %}
+                        <tr>
+                            <td>{{ route.Route_Id }}</td>
+                            <td>{{ route.Destination }}</td>
+                            <td>{{ route.Total_Capacity }}</td>
+                            <td>{{ route.Available_Capacity }}</td>
+                            <td>{{ route.Booked|length }}</td>
+                            <td>{{ route.Ticket_Price * (route.Booked|length) }}</td>
+                            <td><button class="btn btn-soft btn-sm" data-route-book="{{ route.Route_Id }}">Book</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="dashboard-grid mt-4">
+            <section class="dashboard-panel" data-aos="fade-up">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Destinations</p>
+                        <h2>Network list</h2>
+                    </div>
+                    <button class="btn btn-soft" data-get="/viewalldestinations" data-render-target="#destinationList">Refresh</button>
+                </div>
+                <div class="chip-list" id="destinationList">
+                    {% for destination in stats.destinations %}
+                    <span>{{ destination }}</span>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="dashboard-panel" data-aos="fade-up" data-aos-delay="100">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Passenger tools</p>
+                        <h2>Lookup center</h2>
+                    </div>
+                </div>
+                <div class="command-grid compact">
+                    <button data-bs-toggle="modal" data-bs-target="#modalPassengers">By route</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalPassengersDestination">By destination</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalPassengersRoute">Route endpoint</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalSeat">Seat availability</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalCancel">Cancel booking</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalRouteSummary">Route summary</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+<script type="application/json" id="initialStats">{{ stats|tojson }}</script>
+{% endblock %}
